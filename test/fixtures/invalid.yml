@@ -1,0 +1,9 @@
+root: src
+root: './'
+output: dist
+outputFormat: html
+ignore:
+  - '**/node_modules/**'
+  - '**/dist/**'
+preserveData: true
+dryRun: true

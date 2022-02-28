@@ -1,0 +1,45 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+      - next
+      - next-major
+      - beta
+      - alpha
+      - '*.x'
+
+jobs:
+  release:
+    name: Releasing
+    runs-on: ubuntu-latest
+
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v2
+
+      # https://github.com/actions/setup-node#v2
+      - uses: actions/setup-node@v2
+
+      - run: npm install
+      - run: npm run lint
+      - run: npm run build
+      - run: npm run test
+
+      - name: Installing release dependencies
+        run: |
+          npm i -g semantic-release
+          npm i -g @semantic-release/error
+          npm i -g @semantic-release/commit-analyzer
+          npm i -g @semantic-release/release-notes-generator
+          npm i -g @semantic-release/changelog
+          npm i -g @semantic-release/git
+          npm i -g @semantic-release/github
+          npm i -g @semantic-release/npm
+
+      # https://github.com/dhoulb/multi-semantic-release
+      - name: Semantic release
+        run: semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

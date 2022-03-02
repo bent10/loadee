@@ -37,7 +37,7 @@
     "start": "npm run build && ava --watch --verbose",
     "dev": "npm run lib -- --watch",
     "types": "tsc --emitDeclarationOnly",
-    "lib": "esbuild src/*.ts --outdir=dist --format=esm --platform=node --target=node12.22",
+    "lib": "esbuild \"src/*.ts\" --outdir=dist --format=esm --platform=node --target=node12.22",
     "lint": "tsc --noEmit && eslint src test --ext .ts",
     "build": "npm run lib && npm run types",
     "test": "ava",

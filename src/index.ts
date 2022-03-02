@@ -33,7 +33,7 @@
 import path from 'node:path'
 import type { Stats } from 'node:fs'
 import { Buffer } from 'node:buffer'
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, pathToFileURL, URL } from 'node:url'
 import { promises as fsp, statSync, type PathLike } from 'node:fs'
 import jsyaml from 'js-yaml'
 import { LoaderError } from './Error.js'
@@ -191,10 +191,10 @@ export async function loadJson(file: PathLike) {
  */
 export async function loadJs(file: PathLike) {
   let _module: { default?: ExplicitAny } = {}
-  const filepath = pathLikeToPath(file)
+  const filepath = path.resolve(cwd, pathLikeToPath(file))
 
   try {
-    _module = await import(path.resolve(cwd, filepath))
+    _module = await import(pathToFileURL(filepath).href)
   } catch (e: ExplicitAny) {
     throw new LoaderError(e.message, 'JS_LOAD_ERROR')
   }
@@ -278,10 +278,10 @@ export async function loadData(file: PathLike, ...args: ExplicitAny[]) {
  */
 export function setLoaderCwd(url: string | URL) {
   const _url =
-    typeof url === 'string' && !url.startsWith('file:')
-      ? new URL(path.resolve(url), import.meta.url)
+    typeof url === 'string' && url.startsWith('file:')
+      ? new URL(url)
       : url
-  const filepath = fileURLToPath(_url)
+  const filepath = pathLikeToPath(_url)
 
   cwd = statSync(filepath).isDirectory() ? filepath : path.dirname(filepath)
 }

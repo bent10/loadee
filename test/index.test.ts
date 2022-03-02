@@ -1,3 +1,4 @@
+import { join } from 'node:path'
 import { Buffer } from 'node:buffer'
 import { URL } from 'node:url'
 import test from 'ava'
@@ -28,7 +29,7 @@ test.after.always(t => {
     'fixtures/data.json',
     'fixtures/data.yml',
     'fixtures/invalid.yml',
-    cwd + '/test/fixtures/data.yml',
+    join(cwd, 'test/fixtures/data.yml'),
     'fixtures/invalid.json'
   ]
 

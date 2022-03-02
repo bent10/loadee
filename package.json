@@ -30,7 +30,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "README.md",
+    "readme.md",
     "license"
   ],
   "scripts": {

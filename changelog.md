@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/bent10/loadee/compare/v1.0.0...v1.0.1) (2022-03-02)
+
+
+### Bug Fixes
+
+* fixed invalid url scheme on windows ([fd6ad4e](https://github.com/bent10/loadee/commit/fd6ad4e9e33bf33560f27d8c2d45c4b222d5d001))
+
 # 1.0.0 (2022-02-28)
 
 

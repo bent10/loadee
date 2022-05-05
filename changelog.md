@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/bent10/loadee/compare/v1.0.1...v1.1.0) (2022-05-05)
+
+
+### Features
+
+* use `doogu` ([9bbcf0d](https://github.com/bent10/loadee/commit/9bbcf0d11ee697ba05c8acfb28ce85488ee95147))
+
 ## [1.0.1](https://github.com/bent10/loadee/compare/v1.0.0...v1.0.1) (2022-03-02)
 
 

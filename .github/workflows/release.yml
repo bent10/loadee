@@ -1,5 +1,9 @@
 name: Release
 on:
+  repository_dispatch:
+    # curl -v -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${GH_TOKEN}"
+    # https://api.github.com/repos/bent10/loadee/dispatches -d '{ "event_type": "semantic-release" }'
+    types: [semantic-release]
   push:
     branches:
       - main
@@ -13,33 +17,23 @@ jobs:
   release:
     name: Releasing
     runs-on: ubuntu-latest
-
     steps:
-      # https://github.com/actions/checkout
       - uses: actions/checkout@v3
-
-      # https://github.com/actions/setup-node#v2
       - uses: actions/setup-node@v3
-
-      - run: npm install
+        with:
+          node-version: 14.17
+      - run: npm ci
       - run: npm run lint
       - run: npm run build
-      - run: npm run test
+      - run: npm test
 
       - name: Installing release dependencies
         run: |
           npm i -g semantic-release
-          npm i -g @semantic-release/error
-          npm i -g @semantic-release/commit-analyzer
-          npm i -g @semantic-release/release-notes-generator
           npm i -g @semantic-release/changelog
           npm i -g @semantic-release/git
-          npm i -g @semantic-release/github
-          npm i -g @semantic-release/npm
-
-      # https://github.com/dhoulb/multi-semantic-release
       - name: Semantic release
-        run: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: semantic-release

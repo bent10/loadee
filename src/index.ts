@@ -3,11 +3,11 @@
  *
  * ## Install
  *
- * Require Node.js `>=12.22 <13 || >=14.17 <15 || >=16.4 <17 || >=17`.
- *
  * ```bash
  * npm i loadee
  * ```
+ *
+ * **Required** Node.js `>=12`.
  *
  * ## Usage
  *
@@ -89,9 +89,6 @@ function pathLikeToPath(file: PathLike): string {
  * Returns `true` if the file has been changed since the last time it was loaded.
  */
 function hasChanges(cached: FileCached, currentUpdate: number): boolean {
-  /* c8 ignore next 2 */
-  if (!cached) return true
-
   const lastUpdate = cached.meta.mtimeMs
 
   return lastUpdate < currentUpdate
@@ -278,9 +275,7 @@ export async function loadData(file: PathLike, ...args: ExplicitAny[]) {
  */
 export function setLoaderCwd(url: string | URL) {
   const _url =
-    typeof url === 'string' && url.startsWith('file:')
-      ? new URL(url)
-      : url
+    typeof url === 'string' && url.startsWith('file:') ? new URL(url) : url
   const filepath = pathLikeToPath(_url)
 
   cwd = statSync(filepath).isDirectory() ? filepath : path.dirname(filepath)

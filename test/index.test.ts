@@ -12,7 +12,6 @@ import {
   loadData,
   getCachedFile
 } from '../dist/index.js'
-import { LoaderError } from '../dist/Error.js'
 
 const cwd = process.cwd()
 
@@ -46,13 +45,11 @@ test('Reader', async t => {
   await t.notThrowsAsync(reader('fixtures/data.yaml'))
 
   await t.throwsAsync(reader('nofile.md'), {
-    instanceOf: LoaderError,
     code: 'FILE_SYSTEM_ERROR',
     message: /Failed to load nofile.md/
   })
 
   await t.throwsAsync(reader('fixtures/'), {
-    instanceOf: LoaderError,
     code: 'FILE_SYSTEM_ERROR',
     message: /EISDIR: illegal operation on a directory/
   })
@@ -78,13 +75,11 @@ test('YML', async t => {
 
 test('Throws YAML rejection', async t => {
   await t.throwsAsync(loadYaml('nofile.yml'), {
-    instanceOf: LoaderError,
     code: 'FILE_SYSTEM_ERROR',
     message: /Failed to load/
   })
 
   await t.throwsAsync(loadYaml('fixtures/invalid.yml'), {
-    instanceOf: LoaderError,
     code: 'YAML_LOAD_ERROR',
     message: /duplicated mapping key/
   })
@@ -101,13 +96,11 @@ test('JSON', async t => {
 
 test('Throws JSON rejection', async t => {
   await t.throwsAsync(loadJson('nofile.json'), {
-    instanceOf: LoaderError,
     code: 'FILE_SYSTEM_ERROR',
     message: /Failed to load/
   })
 
   await t.throwsAsync(loadJson('fixtures/invalid.json'), {
-    instanceOf: LoaderError,
     code: 'JSON_LOAD_ERROR',
     message: /Unexpected token/
   })
@@ -126,19 +119,16 @@ test('JS', async t => {
 
 test('Throws JS rejection', async t => {
   await t.throwsAsync(loadJs('nofile.js'), {
-    instanceOf: LoaderError,
     code: 'JS_LOAD_ERROR'
   })
 
   await t.throwsAsync(loadJs('fixtures/invalid.js'), {
-    instanceOf: LoaderError,
     code: 'JS_LOAD_ERROR'
   })
 })
 
 test('Throws JS no default export', async t => {
   await t.throwsAsync(loadJs('fixtures/data.nodefault.js'), {
-    instanceOf: LoaderError,
     code: 'REQUIRED_DEFAULT_EXPORT',
     message: 'Expected module file to be exported as default export'
   })
@@ -158,7 +148,6 @@ test('Resolve', async t => {
 
 test('Throws resolve rejection', async t => {
   await t.throwsAsync(load('nofile.xyz'), {
-    instanceOf: LoaderError,
     code: 'FILE_NOT_SUPPORTED',
     message: /Failed to resolve/
   })
@@ -177,17 +166,14 @@ test('loadData', async t => {
 
 test('Throws loadData rejection', async t => {
   await t.throwsAsync(loadData('fixtures/invalid.yml'), {
-    instanceOf: LoaderError,
     code: 'YAML_LOAD_ERROR'
   })
 
   await t.throwsAsync(loadData('fixtures/invalid.json'), {
-    instanceOf: LoaderError,
     code: 'JSON_LOAD_ERROR'
   })
 
   await t.throwsAsync(loadData('nofile.js'), {
-    instanceOf: LoaderError,
     code: 'JS_LOAD_ERROR'
   })
 })

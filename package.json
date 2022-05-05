@@ -23,7 +23,7 @@
     "yaml"
   ],
   "engines": {
-    "node": ">=12.22 <13 || >=14.17 <15 || >=16.4 <17 || >=17"
+    "node": ">=12"
   },
   "type": "module",
   "main": "dist/index.js",
@@ -34,31 +34,21 @@
     "license"
   ],
   "scripts": {
-    "start": "npm run build && ava --watch --verbose",
-    "dev": "npm run lib -- --watch",
-    "types": "tsc --emitDeclarationOnly",
-    "lib": "esbuild src/index.ts src/Error.ts --outdir=dist --format=esm --platform=node --target=node12.22",
-    "lint": "tsc --noEmit && eslint src test --ext .ts",
-    "build": "npm run lib && npm run types",
-    "test": "ava",
+    "start": "npm run build && doogu watch",
+    "lint": "doogu lint --types",
+    "build": "doogu build --types=dist --minify",
+    "test": "ava --verbose",
     "coverage": "c8 -r lcov -r text npm test"
   },
   "dependencies": {
     "js-yaml": "4.1.0"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "1.0.1",
     "@types/js-yaml": "4.0.5",
-    "@types/node": "17.0.21",
-    "@typescript-eslint/eslint-plugin": "5.22.0",
-    "@typescript-eslint/parser": "5.22.0",
     "ava": "4.2.0",
     "c8": "7.11.2",
-    "esbuild": "0.14.38",
-    "eslint": "8.14.0",
-    "eslint-config-prettier": "8.5.0",
-    "ts-node": "10.7.0",
-    "typescript": "4.6.4"
+    "doogu": "1.1.0",
+    "ts-node": "10.7.0"
   },
   "ava": {
     "files": [
@@ -75,7 +65,8 @@
       "--no-warnings"
     ],
     "ignoredByWatcher": [
-      "{.cache,coverage,src}/**"
+      "{coverage,dist}/**",
+      "test/fixtures/**"
     ]
   },
   "config": {

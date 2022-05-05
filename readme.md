@@ -16,14 +16,16 @@ A utility for loading and parsing YAML, JSON, and JS files.
 - [Type aliases](#type-aliases)
   - [FileCached](#filecached)
   - [PathLike](#pathlike)
+- [Contributing](#contributing)
+- [Thank you](#thank-you)
 
 ## Install
-
-Require Node.js `>=12.22 <13 || >=14.17 <15 || >=16.4 <17 || >=17`.
 
 ```bash
 npm i loadee
 ```
+
+**Required** Node.js `>=12`.
 
 ## Usage
 
@@ -271,3 +273,23 @@ Contains the contents and meta informations of a file.
 Ƭ **PathLike**: string \| Buffer \| URL
 
 Valid types for path values in "fs".
+
+## Contributing
+
+We 💛&nbsp; issues.
+
+When committing, please conform to [the semantic-release commit standards](https://www.conventionalcommits.org/). Please install `commitizen` and the adapter globally, if you have not already.
+
+```bash
+npm i -g commitizen cz-conventional-changelog
+```
+
+Now you can use `git cz` or just `cz` instead of `git commit` when committing. You can also use `git-cz`, which is an alias for `cz`.
+
+```bash
+git add . && git cz
+```
+
+## Thank you
+
+A project by [Stilearning](https://stilearning.com) &copy; 2021-2022.

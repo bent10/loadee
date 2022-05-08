@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/bent10/loadee/compare/v1.1.0...v1.1.1) (2022-05-08)
+
+
+### Bug Fixes
+
+* bump doogu ([671b9bb](https://github.com/bent10/loadee/commit/671b9bb08b083518f8247d8025ead7ed91a56512))
+
 # [1.1.0](https://github.com/bent10/loadee/compare/v1.0.1...v1.1.0) (2022-05-05)
 
 

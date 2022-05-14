@@ -1,3 +1,26 @@
+# [2.0.0](https://github.com/bent10/loadee/compare/v1.1.1...v2.0.0) (2022-05-14)
+
+
+### Bug Fixes
+
+* reduced export members ([a0d06b0](https://github.com/bent10/loadee/commit/a0d06b074a370a079ccec15e57a15696aff7a5f5))
+* update readme ([685cbea](https://github.com/bent10/loadee/commit/685cbeab551f9e044162d3ba9f3477ceebd977e1))
+
+
+### Code Refactoring
+
+* simplify apis ([c59e7bc](https://github.com/bent10/loadee/commit/c59e7bcc5bb98815474a375e79d58a5aebab6071))
+
+
+### Features
+
+* add `loadFileSync()` fn ([98ee4dd](https://github.com/bent10/loadee/commit/98ee4dd464e7c49e5405c447ec1318914feaf0ca))
+
+
+### BREAKING CHANGES
+
+* rename `loadData` to `loadFile`
+
 ## [1.1.1](https://github.com/bent10/loadee/compare/v1.1.0...v1.1.1) (2022-05-08)
 
 

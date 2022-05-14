@@ -1,4 +1,4 @@
-// error: cjs in .js files is not supported
+// support for commonjs!
 exports.module = () => {
   return [
     { name: 'John Doe', subscription: 'Standard' },

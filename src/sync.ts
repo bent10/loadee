@@ -13,7 +13,7 @@ import type { Module, PlainObject } from './types.js'
  * // => { ... }
  * ```
  */
-export function fromYAMLSync(filepath: string): PlainObject {
+function fromYAMLSync(filepath: string): PlainObject {
   try {
     return <PlainObject>jsyaml.load(readFileSync(filepath, 'utf8'))
   } catch (error) {
@@ -29,7 +29,7 @@ export function fromYAMLSync(filepath: string): PlainObject {
  * // => { ... }
  * ```
  */
-export function fromJSONSync(filepath: string): PlainObject {
+function fromJSONSync(filepath: string): PlainObject {
   try {
     return JSON.parse(readFileSync(filepath, 'utf8'))
   } catch (error) {
@@ -45,7 +45,7 @@ export function fromJSONSync(filepath: string): PlainObject {
  * // => can be a function, object, string, number, etc.
  * ```
  */
-export function fromJSSync(filepath: string): Module {
+function fromJSSync(filepath: string): Module {
   try {
     const ext = extname(filepath)
     const require = createRequire(import.meta.url)

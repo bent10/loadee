@@ -12,7 +12,7 @@ import type { Module, PlainObject } from './types.js'
  * // => { ... }
  * ```
  */
-export async function fromYAML(filepath: string): Promise<PlainObject> {
+async function fromYAML(filepath: string): Promise<PlainObject> {
   try {
     return <PlainObject>jsyaml.load(await fsp.readFile(filepath, 'utf8'))
   } catch (error) {
@@ -28,7 +28,7 @@ export async function fromYAML(filepath: string): Promise<PlainObject> {
  * // => { ... }
  * ```
  */
-export async function fromJSON(filepath: string): Promise<PlainObject> {
+async function fromJSON(filepath: string): Promise<PlainObject> {
   try {
     return JSON.parse(await fsp.readFile(filepath, 'utf8'))
   } catch (error) {
@@ -44,7 +44,7 @@ export async function fromJSON(filepath: string): Promise<PlainObject> {
  * // => can be a function, object, string, number, etc.
  * ```
  */
-export async function fromJS(filepath: string): Promise<Module> {
+async function fromJS(filepath: string): Promise<Module> {
   try {
     const ext = extname(filepath)
     const _module: Module = await import(filepath)

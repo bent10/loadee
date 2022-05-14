@@ -92,14 +92,12 @@ test('from cjs', async t => {
 test('mjs not supported', t => {
   t.throws(() => loadFileSync('fixtures/invalid.js', t.context), {
     instanceOf: Error,
-    code: 'ERR_REQUIRE_ESM',
-    message: /require\(\) of ES Module/
+    code: 'ERR_REQUIRE_ESM'
   })
 
   t.throws(() => loadFileSync('fixtures/data.nodefault.js', t.context), {
     instanceOf: Error,
-    code: 'ERR_REQUIRE_ESM',
-    message: /require\(\) of ES Module/
+    code: 'ERR_REQUIRE_ESM'
   })
 })
 

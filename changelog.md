@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/bent10/loadee/compare/v2.1.0...v2.1.1) (2022-05-15)
+
+
+### Bug Fixes
+
+* `Promise` handling ([ea9c31a](https://github.com/bent10/loadee/commit/ea9c31ab79c2a18244b500b61b5b66180aa4c01c))
+
 # [2.1.0](https://github.com/bent10/loadee/compare/v2.0.0...v2.1.0) (2022-05-15)
 
 

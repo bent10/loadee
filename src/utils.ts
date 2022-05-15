@@ -26,3 +26,14 @@ export function pathLikeToPath(
 export function isFileUrlLike(pathlike: string): boolean {
   return pathlike.startsWith('file:')
 }
+
+/**
+ * Returns `true` if the given `value` is a promise.
+ */
+export function isPromise(value: unknown): boolean {
+  return (
+    !!value &&
+    (typeof value === 'object' || typeof value === 'function') &&
+    typeof (value as any).then === 'function'
+  )
+}

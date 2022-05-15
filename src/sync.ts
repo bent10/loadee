@@ -2,7 +2,7 @@ import { createRequire } from 'node:module'
 import { extname } from 'node:path'
 import { readFileSync, type PathLike } from 'node:fs'
 import jsyaml from 'js-yaml'
-import { pathLikeToPath } from './utils.js'
+import { isPromise, pathLikeToPath } from './utils.js'
 import type { Module, PlainObject } from './types.js'
 
 /**
@@ -105,12 +105,15 @@ export function loadFileSync(
     case '.cjs':
       const { module } = fromJSSync(filepath)
       // handle promise, if any
-      result =
-        typeof module === 'function'
-          ? module() instanceof Promise
-            ? Promise.resolve(module(...args))
-            : module(...args)
-          : module
+      if (isPromise(module)) {
+        try {
+          result = Promise.resolve(module(...args))
+        } catch {
+          result = Promise.resolve(module)
+        }
+      } else {
+        result = typeof module === 'function' ? module(...args) : module
+      }
       break
     default:
       throw new TypeError(

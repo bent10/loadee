@@ -1,7 +1,7 @@
 import { extname } from 'node:path'
 import { promises as fsp, type PathLike } from 'node:fs'
 import jsyaml from 'js-yaml'
-import { pathLikeToPath } from './utils.js'
+import { isPromise, pathLikeToPath } from './utils.js'
 import type { Module, PlainObject } from './types.js'
 
 /**
@@ -104,22 +104,28 @@ export async function loadFile(
     case '.mjs':
       const { default: esModule } = await fromJS(filepath)
       // handle promise, if any
-      result =
-        typeof esModule === 'function'
-          ? esModule() instanceof Promise
-            ? await esModule(...args)
-            : esModule(...args)
-          : esModule
+      if (isPromise(esModule)) {
+        try {
+          result = await esModule(...args)
+        } catch {
+          result = await esModule
+        }
+      } else {
+        result = typeof esModule === 'function' ? esModule(...args) : esModule
+      }
       break
     case '.cjs':
       const { module } = await fromJS(filepath)
       // handle promise, if any
-      result =
-        typeof module === 'function'
-          ? module() instanceof Promise
-            ? await module(...args)
-            : module(...args)
-          : module
+      if (isPromise(module)) {
+        try {
+          result = await module(...args)
+        } catch {
+          result = await module
+        }
+      } else {
+        result = typeof module === 'function' ? module(...args) : module
+      }
       break
     default:
       throw new TypeError(

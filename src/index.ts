@@ -17,14 +17,14 @@
  * ```js
  * import { loadFile, loadFileSync } from 'loadee'
  *
- * const fromYAML = await loadFile('.config.yaml')
  * const fromJSON = await loadFile('.config.json')
+ * const fromYAML = await loadFile('.config.yaml')
  * const fromJS = await loadFile('.config.js')
  * const fromCJS = await loadFile('.config.cjs')
  *
  * // sync
+ * const fromJSONSync = loadFileSync('.configrc')
  * const fromYAMLSync = loadFileSync('.config.yaml')
- * const fromJSONSync = loadFileSync('.config.json')
  * // sync fn does not support ES modules,
  * // so the `.js` file will treated as CommonJS
  * const fromJSSync = loadFileSync('.config.js')

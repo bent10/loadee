@@ -57,6 +57,25 @@ test('Throws from json', t => {
   })
 })
 
+test('from extension less', t => {
+  const fromExtless = loadFileSync('fixtures/.data', t.context)
+
+  t.deepEqual(fromExtless, mock)
+})
+
+test('Throws from extension less', t => {
+  t.throws(() => loadFileSync('.nofile', t.context), {
+    instanceOf: Error,
+    code: 'ENOENT',
+    message: /ENOENT: no such file or directory/
+  })
+
+  t.throws(() => loadFileSync('fixtures/.invalid', t.context), {
+    instanceOf: Error,
+    message: /Unexpected token/
+  })
+})
+
 test('failed from mjs', t => {
   t.throws(() => loadFileSync(pathToFileURL('test/fixtures/data.js').href), {
     code: 'ERR_REQUIRE_ESM'

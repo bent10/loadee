@@ -18,14 +18,14 @@ This package is pure ESM, please read the
 ```js
 import { loadFile, loadFileSync } from 'loadee'
 
-const fromYAML = await loadFile('.config.yaml')
 const fromJSON = await loadFile('.config.json')
+const fromYAML = await loadFile('.config.yaml')
 const fromJS = await loadFile('.config.js')
 const fromCJS = await loadFile('.config.cjs')
 
 // sync
+const fromJSONSync = loadFileSync('.configrc')
 const fromYAMLSync = loadFileSync('.config.yaml')
-const fromJSONSync = loadFileSync('.config.json')
 // sync fn does not support ES modules,
 // so the `.js` file will treated as CommonJS
 const fromJSSync = loadFileSync('.config.js')
@@ -45,9 +45,9 @@ boolean, null or undefined.
 ```js
 import { loadFile } from 'loadee'
 
-const fromYaml = await loadFile('data.yaml')
-// => { ... }
 const fromJson = await loadFile('data.json')
+// => { ... }
+const fromYaml = await loadFile('data.yaml')
 // => { ... }
 const fromJs = await loadFile('data.js')
 // => { ... } or unknown
@@ -84,9 +84,9 @@ boolean, null or undefined.
 ```js
 import { loadFileSync } from 'loadee'
 
-const fromYamlSync = loadFileSync('data.yaml')
-// => { ... }
 const fromJsonSync = loadFileSync('data.json')
+// => { ... }
+const fromYamlSync = loadFileSync('data.yaml')
 // => { ... }
 const fromJsSync = loadFileSync('data.js')
 // => { ... } or unknown

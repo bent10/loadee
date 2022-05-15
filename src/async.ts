@@ -73,9 +73,9 @@ async function fromJS(filepath: string): Promise<Module> {
  * ```js
  * import { loadFile } from 'loadee'
  *
- * const fromYaml = await loadFile('data.yaml')
- * // => { ... }
  * const fromJson = await loadFile('data.json')
+ * // => { ... }
+ * const fromYaml = await loadFile('data.yaml')
  * // => { ... }
  * const fromJs = await loadFile('data.js')
  * // => { ... } or unknown
@@ -97,6 +97,7 @@ export async function loadFile(
       result = await fromYAML(filepath)
       break
     case '.json':
+    case '':
       result = await fromJSON(filepath)
       break
     case '.js':

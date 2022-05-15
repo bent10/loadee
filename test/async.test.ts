@@ -2,12 +2,9 @@ import { pathToFileURL } from 'node:url'
 import anyTest, { TestFn } from 'ava'
 import { YAMLException } from 'js-yaml'
 import { loadFile } from '../dist/index.js'
+import { mock } from './utils.js'
 
 const test = anyTest as TestFn<string>
-const mock = [
-  { name: 'John Doe', subscription: 'Standard' },
-  { name: 'Jane Smith', subscription: 'Free' }
-]
 
 test.before(t => {
   t.context = 'test/'
@@ -52,6 +49,25 @@ test('Throws from json', async t => {
   })
 
   await t.throwsAsync(loadFile('fixtures/invalid.json', t.context), {
+    instanceOf: Error,
+    message: /Unexpected token/
+  })
+})
+
+test('from extension less', async t => {
+  const fromExtless = await loadFile('fixtures/.data', t.context)
+
+  t.deepEqual(fromExtless, mock)
+})
+
+test('Throws from extension less', async t => {
+  await t.throwsAsync(loadFile('.nofile', t.context), {
+    instanceOf: Error,
+    code: 'ENOENT',
+    message: /ENOENT: no such file or directory/
+  })
+
+  await t.throwsAsync(loadFile('fixtures/.invalid', t.context), {
     instanceOf: Error,
     message: /Unexpected token/
   })

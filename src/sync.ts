@@ -75,9 +75,9 @@ function fromJSSync(filepath: string): Module {
  * ```js
  * import { loadFileSync } from 'loadee'
  *
- * const fromYamlSync = loadFileSync('data.yaml')
- * // => { ... }
  * const fromJsonSync = loadFileSync('data.json')
+ * // => { ... }
+ * const fromYamlSync = loadFileSync('data.yaml')
  * // => { ... }
  * const fromJsSync = loadFileSync('data.js')
  * // => { ... } or unknown
@@ -97,6 +97,7 @@ export function loadFileSync(
       result = fromYAMLSync(filepath)
       break
     case '.json':
+    case '':
       result = fromJSONSync(filepath)
       break
     // treat `.js` as an commonjs module

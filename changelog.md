@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/bent10/loadee/compare/v2.0.0...v2.1.0) (2022-05-15)
+
+
+### Features
+
+* supports loading extless file ([95c19da](https://github.com/bent10/loadee/commit/95c19da061a9b72ec15336f62e4d5f6d46e74be1))
+
 # [2.0.0](https://github.com/bent10/loadee/compare/v1.1.1...v2.0.0) (2022-05-14)
 
 

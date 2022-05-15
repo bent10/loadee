@@ -64,10 +64,13 @@ function fromJSSync(filepath: string): Module {
 }
 
 /**
- * Resolves data from `yaml`, `json`, or `js` file synchronously and normalize
- * it to either a plain object, string, number, boolean, null or undefined.
+ * Resolves data from `yaml`, `json`, or `js` files synchronously.
  *
- * **NOTE:** This function is cannot be used to load ES modules.
+ * The `js` module will be normalize to either a plain object, string, number,
+ * boolean, null or undefined.
+ *
+ * > **NOTE:** This function is cannot be used to load ES modules. The `.js`
+ * > file will treated as CommonJS.
  *
  * ```js
  * import { loadFileSync } from 'loadee'
@@ -77,8 +80,6 @@ function fromJSSync(filepath: string): Module {
  * const fromJsonSync = loadFileSync('data.json')
  * // => { ... }
  * const fromJsSync = loadFileSync('data.js')
- * // => { ... } or unknown
- * const fromCjs = await loadFile('data.cjs')
  * // => { ... } or unknown
  * ```
  */

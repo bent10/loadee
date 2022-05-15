@@ -65,8 +65,10 @@ async function fromJS(filepath: string): Promise<Module> {
 }
 
 /**
- * Resolves data from `yaml`, `json`, or `js` file and normalize it to
- * either a plain object, string, number, boolean, null or undefined.
+ * Resolves data from `yaml`, `json`, or `js` files.
+ *
+ * The `js` module will be normalize to either a plain object, string, number,
+ * boolean, null or undefined.
  *
  * ```js
  * import { loadFile } from 'loadee'

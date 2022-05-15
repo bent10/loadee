@@ -69,7 +69,7 @@ function fromJSSync(filepath: string): Module {
  * The `js` module will be normalize to either a plain object, string, number,
  * boolean, null or undefined.
  *
- * > **NOTE:** This function is cannot be used to load ES modules. The `.js`
+ * > **NOTE:** This function cannot be used to load ES modules. The `.js`
  * > file will treated as CommonJS.
  *
  * ```js

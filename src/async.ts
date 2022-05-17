@@ -1,4 +1,5 @@
 import { extname } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { promises as fsp, type PathLike } from 'node:fs'
 import jsyaml from 'js-yaml'
 import { isPromise, pathLikeToPath } from './utils.js'
@@ -47,7 +48,7 @@ async function fromJSON(filepath: string): Promise<PlainObject> {
 async function fromJS(filepath: string): Promise<Module> {
   try {
     const ext = extname(filepath)
-    const _module: Module = await import(filepath)
+    const _module: Module = await import(pathToFileURL(filepath).toString())
 
     if (
       (/^\.(m?js)$/.test(ext) && !('default' in _module)) ||

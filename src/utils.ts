@@ -24,7 +24,7 @@ export function pathLikeToPath(
  * Returns true if the given `pathlike` is a file URL like.
  */
 export function isFileUrlLike(pathlike: string): boolean {
-  return pathlike.startsWith('file:')
+  return pathlike.startsWith('file:') || pathlike.startsWith('data:')
 }
 
 /**

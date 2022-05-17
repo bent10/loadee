@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/bent10/loadee/compare/v2.1.1...v2.1.2) (2022-05-17)
+
+
+### Bug Fixes
+
+* **windows:** fixed `ERR_UNSUPPORTED_ESM_URL_SCHEME` ([98d9233](https://github.com/bent10/loadee/commit/98d92331b6780e9e2adb09ca0c9609f904823dd6))
+
 ## [2.1.1](https://github.com/bent10/loadee/compare/v2.1.0...v2.1.1) (2022-05-15)
 
 

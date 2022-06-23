@@ -89,37 +89,31 @@ export function loadFileSync(
   ...args: unknown[]
 ): PlainObject | unknown {
   const filepath = pathLikeToPath(pathlike, cwd)
-  let result: PlainObject | unknown
 
   switch (extname(filepath)) {
     case '.yml':
     case '.yaml':
-      result = fromYAMLSync(filepath)
-      break
+      return fromYAMLSync(filepath)
     case '.json':
     case '':
-      result = fromJSONSync(filepath)
-      break
-    // treat `.js` as an commonjs module
+      return fromJSONSync(filepath)
+    // treat `.js` file as CommonJS
     case '.js':
     case '.cjs':
       const { module } = fromJSSync(filepath)
       // handle promise, if any
       if (isPromise(module)) {
         try {
-          result = Promise.resolve(module(...args))
+          return Promise.resolve(module(...args))
         } catch {
-          result = Promise.resolve(module)
+          return Promise.resolve(module)
         }
       } else {
-        result = typeof module === 'function' ? module(...args) : module
+        return typeof module === 'function' ? module(...args) : module
       }
-      break
     default:
       throw new TypeError(
         `Failed to resolve ${filepath}, the file is not supported`
       )
   }
-
-  return result
 }

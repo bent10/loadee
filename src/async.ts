@@ -90,49 +90,42 @@ export async function loadFile(
   ...args: unknown[]
 ): Promise<PlainObject | unknown> {
   const filepath = pathLikeToPath(pathlike, cwd)
-  let result: PlainObject | unknown
 
   switch (extname(filepath)) {
     case '.yml':
     case '.yaml':
-      result = await fromYAML(filepath)
-      break
+      return await fromYAML(filepath)
     case '.json':
     case '':
-      result = await fromJSON(filepath)
-      break
+      return await fromJSON(filepath)
     case '.js':
     case '.mjs':
       const { default: esModule } = await fromJS(filepath)
       // handle promise, if any
       if (isPromise(esModule)) {
         try {
-          result = await esModule(...args)
+          return await esModule(...args)
         } catch {
-          result = await esModule
+          return await esModule
         }
       } else {
-        result = typeof esModule === 'function' ? esModule(...args) : esModule
+        return typeof esModule === 'function' ? esModule(...args) : esModule
       }
-      break
     case '.cjs':
       const { module } = await fromJS(filepath)
       // handle promise, if any
       if (isPromise(module)) {
         try {
-          result = await module(...args)
+          return await module(...args)
         } catch {
-          result = await module
+          return await module
         }
       } else {
-        result = typeof module === 'function' ? module(...args) : module
+        return typeof module === 'function' ? module(...args) : module
       }
-      break
     default:
       throw new TypeError(
         `Failed to resolve ${filepath}, the file is not supported`
       )
   }
-
-  return result
 }

@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/bent10/loadee/compare/v2.1.2...v2.1.3) (2022-06-23)
+
+
+### Bug Fixes
+
+* **doogu:** refactor ([f2139d7](https://github.com/bent10/loadee/commit/f2139d79519081b46c59b29411a804eaf9d1b1ea))
+
 ## [2.1.2](https://github.com/bent10/loadee/compare/v2.1.1...v2.1.2) (2022-05-17)
 
 

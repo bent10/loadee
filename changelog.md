@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/bent10/loadee/compare/v2.1.3...v2.1.4) (2022-06-24)
+
+
+### Bug Fixes
+
+* **types:** resolves `no-explicit-any` ([aac0cf9](https://github.com/bent10/loadee/commit/aac0cf98df12487ba30e131cefa28581982da8e9))
+
 ## [2.1.3](https://github.com/bent10/loadee/compare/v2.1.2...v2.1.3) (2022-06-23)
 
 

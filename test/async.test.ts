@@ -112,7 +112,7 @@ test('Throws from mjs & cjs', async t => {
 
   await t.throwsAsync(loadFile('fixtures/invalid.js', t.context), {
     instanceOf: ReferenceError,
-    message: /exports is not defined in ES module scope/
+    message: /exports is not defined/
   })
 
   await t.throwsAsync(loadFile('fixtures/cjs/invalid.cjs', t.context), {

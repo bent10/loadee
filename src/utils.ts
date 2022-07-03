@@ -5,10 +5,7 @@ import type { PathLike } from 'node:fs'
 /**
  * Turn a PathLike into a `path` string.
  */
-export function pathLikeToPath(
-  pathlike: PathLike,
-  cwd = process.cwd()
-): string {
+export function pathLikeToPath(pathlike: PathLike, cwd: string): string {
   if (Buffer.isBuffer(pathlike)) pathlike = String(pathlike)
 
   if (typeof pathlike === 'string') {

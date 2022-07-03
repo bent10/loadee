@@ -1,147 +1,136 @@
 import { pathToFileURL } from 'node:url'
-import anyTest, { TestFn } from 'ava'
 import { YAMLException } from 'js-yaml'
 import { loadFileSync } from '../dist/index.js'
 
-const test = anyTest as TestFn<string>
-const mock = [
+const testPath = 'test/'
+const data = [
   { name: 'John Doe', subscription: 'Standard' },
   { name: 'Jane Smith', subscription: 'Free' }
 ]
 
-test.before(t => {
-  t.context = 'test/'
+test('from yml/yaml', () => {
+  const fromYaml = loadFileSync('fixtures/data.yaml', testPath)
+  const fromYml = loadFileSync(Buffer.from('fixtures/data.yml'), testPath)
+
+  expect(fromYaml).toEqual(data)
+  expect(fromYml).toEqual(data)
 })
 
-test('from yml/yaml', t => {
-  const fromYaml = loadFileSync('fixtures/data.yaml', t.context)
-  const fromYml = loadFileSync(Buffer.from('fixtures/data.yml'), t.context)
-
-  t.deepEqual(fromYaml, mock)
-  t.deepEqual(fromYml, mock)
-})
-
-test('Throws from yml/yaml', t => {
-  t.throws(() => loadFileSync('nofile.yaml', t.context), {
-    instanceOf: Error,
-    code: 'ENOENT',
-    message: /ENOENT: no such file or directory/
-  })
-
-  t.throws(() => loadFileSync('fixtures/invalid.yml', t.context), {
-    instanceOf: YAMLException,
-    message: /duplicated mapping key \(2\:1\)/
-  })
-})
-
-test('from json', t => {
-  const fromJson = loadFileSync('fixtures/data.json', t.context)
-  const fromJsonUrl = loadFileSync(
-    new URL('fixtures/data.json', pathToFileURL(t.context).href)
+test('Throws from yml/yaml', () => {
+  // Error: ENOENT: no such file or directory, open...
+  expect(() => loadFileSync('nofile.yaml', testPath)).toThrowError(
+    /ENOENT: no such file or directory, open/
   )
 
-  t.deepEqual(fromJson, mock)
-  t.deepEqual(fromJsonUrl, mock)
+  // YAMLException: duplicated mapping key (2:1)...
+  expect(() => loadFileSync('fixtures/invalid.yml', testPath)).toThrowError(
+    /duplicated mapping key \(2\:1\)/
+  )
 })
 
-test('Throws from json', t => {
-  t.throws(() => loadFileSync('nofile.json', t.context), {
-    instanceOf: Error,
-    code: 'ENOENT',
-    message: /ENOENT: no such file or directory/
-  })
+test('from json', () => {
+  const fromJson = loadFileSync('fixtures/data.json', testPath)
+  const fromJsonUrl = loadFileSync(
+    new URL('fixtures/data.json', pathToFileURL(testPath).href)
+  )
 
-  t.throws(() => loadFileSync('fixtures/invalid.json', t.context), {
-    instanceOf: Error,
-    message: /Unexpected token/
-  })
+  expect(fromJson).toEqual(data)
+  expect(fromJsonUrl).toEqual(data)
 })
 
-test('from extension less', t => {
-  const fromExtless = loadFileSync('fixtures/.data', t.context)
+test('Throws from json', () => {
+  // Error: ENOENT: no such file or directory, open...
+  expect(() => loadFileSync('nofile.json')).toThrowError(
+    /ENOENT: no such file or directory, open/
+  )
 
-  t.deepEqual(fromExtless, mock)
+  // Error: Unexpected token...
+  expect(() => loadFileSync('fixtures/invalid.json', testPath)).toThrowError(
+    /Unexpected token/
+  )
 })
 
-test('Throws from extension less', t => {
-  t.throws(() => loadFileSync('.nofile', t.context), {
-    instanceOf: Error,
-    code: 'ENOENT',
-    message: /ENOENT: no such file or directory/
-  })
+test('from extension less', () => {
+  const fromExtless = loadFileSync('fixtures/.data', testPath)
 
-  t.throws(() => loadFileSync('fixtures/.invalid', t.context), {
-    instanceOf: Error,
-    message: /Unexpected token/
-  })
+  expect(fromExtless).toEqual(data)
 })
 
-test('failed from mjs', t => {
-  t.throws(() => loadFileSync(pathToFileURL('test/fixtures/data.js').href), {
-    code: 'ERR_REQUIRE_ESM'
-  })
-  t.throws(() => loadFileSync('fixtures/data.async.js', t.context), {
-    code: 'ERR_REQUIRE_ESM'
-  })
+test('Throws from extension less', () => {
+  // Error: ENOENT: no such file or directory, open...
+  expect(() => loadFileSync('.nofile')).toThrowError(
+    /ENOENT: no such file or directory/
+  )
 
-  t.throws(() => loadFileSync('fixtures/data.var.js', t.context), {
-    code: 'ERR_REQUIRE_ESM'
-  })
-  t.throws(() => loadFileSync('fixtures/data.asyncvar.js', t.context), {
-    code: 'ERR_REQUIRE_ESM'
-  })
+  // Error: Unexpected token...
+  expect(() => loadFileSync('fixtures/.invalid', testPath)).toThrowError(
+    /Unexpected token/
+  )
 })
 
-test('from cjs', async t => {
+test('failed from mjs', () => {
+  // Error: code: ERR_REQUIRE_ESM
+  expect(() =>
+    loadFileSync(pathToFileURL('test/fixtures/data.js').href)
+  ).toThrowError()
+  // Error: code: ERR_REQUIRE_ESM
+  expect(() => loadFileSync('fixtures/data.async.js', testPath)).toThrowError()
+  // Error: code: ERR_REQUIRE_ESM
+  expect(() => loadFileSync('fixtures/data.var.js', testPath)).toThrowError()
+  // Error: code: ERR_REQUIRE_ESM
+  expect(() =>
+    loadFileSync('fixtures/data.asyncvar.js', testPath)
+  ).toThrowError()
+})
+
+test('from cjs', async () => {
   const fromCjs = loadFileSync(pathToFileURL('test/fixtures/cjs/data.cjs').href)
-  const fromCjsAsync = loadFileSync('fixtures/cjs/data.async.cjs', t.context)
+  const fromCjsAsync = loadFileSync('fixtures/cjs/data.async.cjs', testPath)
 
-  const fromCjsVar = loadFileSync('fixtures/cjs/data.var.cjs', t.context)
+  const fromCjsVar = loadFileSync('fixtures/cjs/data.var.cjs', testPath)
   const fromCjsVarAsync = loadFileSync(
     'fixtures/cjs/data.asyncvar.cjs',
-    t.context
+    testPath
   )
 
-  t.deepEqual(fromCjs, mock)
-  t.deepEqual(await fromCjsAsync, mock)
-  t.is(fromCjsVar, 42)
-  t.is(await fromCjsVarAsync, 42)
+  expect(fromCjs).toEqual(data)
+  expect(await fromCjsAsync).toEqual(data)
+  expect(fromCjsVar).toBe(42)
+  expect(await fromCjsVarAsync).toBe(42)
 })
 
-test('mjs not supported', t => {
-  t.throws(() => loadFileSync('fixtures/invalid.js', t.context), {
-    instanceOf: Error,
-    code: 'ERR_REQUIRE_ESM'
-  })
+test('mjs not supported', () => {
+  // Error: code: ERR_REQUIRE_ESM
+  expect(() => loadFileSync('fixtures/invalid.js', testPath)).toThrowError()
 
-  t.throws(() => loadFileSync('fixtures/data.nodefault.js', t.context), {
-    instanceOf: Error,
-    code: 'ERR_REQUIRE_ESM'
-  })
+  // Error: code: ERR_REQUIRE_ESM
+  expect(() =>
+    loadFileSync('fixtures/data.nodefault.js', testPath)
+  ).toThrowError()
 })
 
-test('Throws from cjs', t => {
-  t.throws(() => loadFileSync('nofile.cjs', t.context), {
-    instanceOf: Error,
-    message: /Cannot find module/
-  })
+test('Throws from cjs', () => {
+  // Error: Cannot find module...
+  expect(() => loadFileSync('nofile.cjs', testPath)).toThrowError(
+    /Cannot find module/
+  )
 
-  t.throws(() => loadFileSync('fixtures/cjs/invalid.cjs', t.context), {
-    instanceOf: SyntaxError,
-    message: /Unexpected token \'export\'/
-  })
+  // SyntaxError: Unexpected token 'export'...
+  expect(() => loadFileSync('fixtures/cjs/invalid.cjs', testPath)).toThrowError(
+    /Unexpected token \'export\'/
+  )
 })
 
-test('Throws from mjs & cjs no default export', t => {
-  t.throws(() => loadFileSync('fixtures/cjs/data.nodefault.cjs', t.context), {
-    instanceOf: SyntaxError,
-    message: 'Expected module file to be exported as default export'
-  })
+test('Throws from mjs & cjs no default export', () => {
+  // SyntaxError: Expected module file to be exported as default export...
+  expect(() =>
+    loadFileSync('fixtures/cjs/data.nodefault.cjs', testPath)
+  ).toThrowError(/Expected module file to be exported as default export/)
 })
 
-test('throws unknown file type', t => {
-  t.throws(() => loadFileSync('fixtures/data.toml', t.context), {
-    instanceOf: TypeError,
-    message: /Failed to resolve/
-  })
+test('throws unknown file type', () => {
+  // TypeError: Failed to resolve...
+  expect(() => loadFileSync('fixtures/data.toml', testPath)).toThrowError(
+    /Failed to resolve/
+  )
 })

@@ -7,8 +7,6 @@
  * npm i loadee
  * ```
  *
- * **Required** Node.js `>=12`.
- *
  * ## Usage
  *
  * This package is pure ESM, please read the

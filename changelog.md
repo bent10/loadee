@@ -1,3 +1,10 @@
+## [2.1.5](https://github.com/bent10/loadee/compare/v2.1.4...v2.1.5) (2022-07-03)
+
+
+### Bug Fixes
+
+* omit `engines` field ([4605470](https://github.com/bent10/loadee/commit/4605470a392e6f666cc94617c9360e3ed3fe1795))
+
 ## [2.1.4](https://github.com/bent10/loadee/compare/v2.1.3...v2.1.4) (2022-06-24)
 
 

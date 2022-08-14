@@ -1,3 +1,10 @@
+## [2.1.6](https://github.com/bent10/loadee/compare/v2.1.5...v2.1.6) (2022-08-14)
+
+
+### Bug Fixes
+
+* disable `extenalHelpers` ([c5a8492](https://github.com/bent10/loadee/commit/c5a8492907b63668bfa97dd3b0a16d93fdcf9c20))
+
 ## [2.1.5](https://github.com/bent10/loadee/compare/v2.1.4...v2.1.5) (2022-07-03)
 
 

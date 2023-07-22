@@ -1,7 +1,7 @@
 import { extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { promises as fsp, type PathLike } from 'node:fs'
-import jsyaml from 'js-yaml'
+import { load } from 'js-yaml'
 import { isPromise, pathLikeToPath } from './utils.js'
 import type { Module, PlainObject } from './types.js'
 
@@ -15,7 +15,7 @@ import type { Module, PlainObject } from './types.js'
  */
 async function fromYAML(filepath: string): Promise<PlainObject> {
   try {
-    return <PlainObject>jsyaml.load(await fsp.readFile(filepath, 'utf8'))
+    return <PlainObject>load(await fsp.readFile(filepath, 'utf8'))
   } catch (error) {
     throw error
   }
@@ -123,9 +123,9 @@ export async function loadFile(
       } else {
         return typeof module === 'function' ? module(...args) : module
       }
-    default:
-      throw new TypeError(
-        `Failed to resolve ${filepath}, the file is not supported`
-      )
   }
+
+  throw new TypeError(
+    `Failed to resolve ${filepath}, the file is not supported`
+  )
 }

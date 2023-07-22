@@ -1,6 +1,5 @@
 import { pathToFileURL } from 'node:url'
-import { YAMLException } from 'js-yaml'
-import { loadFileSync } from '../dist/index.js'
+import { loadFileSync } from '../src/index.js'
 
 const testPath = 'test/'
 const data = [

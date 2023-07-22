@@ -31,19 +31,21 @@
     "license"
   ],
   "scripts": {
-    "start": "npm run build && npm run watch",
-    "watch": "chokidar \"src/*.ts\" -c \"npm run build\"",
-    "lint": "tsc --noEmit && eslint \"./src\" --ext \".ts\" --cache --cache-location \"node_modules/.cache/.eslintcache\"",
-    "build": "swc \"./src\" -d \"dist\" && tsc -d --emitDeclarationOnly",
-    "test": "node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js --verbose",
-    "coverage": "npm test -- --coverage"
+    "start": "npm run dev",
+    "dev": "npm run types && vite build --emptyOutDir=false --watch",
+    "build": "vite build && npm run types",
+    "test": "vitest --ui",
+    "coverage": "vitest run --coverage",
+    "types": "tsc --project tsconfig.prod.json",
+    "lint": "tsc --noEmit && eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.5",
-    "doogu": "^2.4.151"
+    "doogu": "^3.2.0"
   },
   "config": {
     "commitizen": {
@@ -51,59 +53,10 @@
     }
   },
   "eslintConfig": {
-    "extends": "./node_modules/doogu/config/eslint.json"
+    "extends": "./node_modules/doogu/eslint"
   },
-  "prettier": "doogu/config/prettier.json",
-  "jest": {
-    "transform": {
-      "^.*.ts$": [
-        "@swc/jest"
-      ]
-    },
-    "extensionsToTreatAsEsm": [
-      ".ts"
-    ],
-    "watchPathIgnorePatterns": [
-      "<rootDir>/test/fixtures"
-    ],
-    "clearMocks": true,
-    "coverageDirectory": "coverage"
-  },
+  "prettier": "doogu/prettier.json",
   "release": {
-    "branches": [
-      "+([0-9])?(.{+([0-9]),x}).x",
-      "main",
-      "next",
-      "next-major",
-      {
-        "name": "beta",
-        "prerelease": true
-      },
-      {
-        "name": "alpha",
-        "prerelease": true
-      }
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      [
-        "@semantic-release/changelog",
-        {
-          "changelogFile": "changelog.md"
-        }
-      ],
-      [
-        "@semantic-release/git",
-        {
-          "assets": [
-            "changelog.md"
-          ],
-          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-        }
-      ],
-      "@semantic-release/github",
-      "@semantic-release/npm"
-    ]
+    "extends": "doogu/release.config.js"
   }
 }

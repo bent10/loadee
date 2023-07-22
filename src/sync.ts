@@ -1,7 +1,7 @@
 import { createRequire } from 'node:module'
 import { extname } from 'node:path'
 import { readFileSync, type PathLike } from 'node:fs'
-import jsyaml from 'js-yaml'
+import { load } from 'js-yaml'
 import { isPromise, pathLikeToPath } from './utils.js'
 import type { Module, PlainObject } from './types.js'
 
@@ -15,7 +15,7 @@ import type { Module, PlainObject } from './types.js'
  */
 function fromYAMLSync(filepath: string): PlainObject {
   try {
-    return <PlainObject>jsyaml.load(readFileSync(filepath, 'utf8'))
+    return <PlainObject>load(readFileSync(filepath, 'utf8'))
   } catch (error) {
     throw error
   }
@@ -111,9 +111,9 @@ export function loadFileSync(
       } else {
         return typeof module === 'function' ? module(...args) : module
       }
-    default:
-      throw new TypeError(
-        `Failed to resolve ${filepath}, the file is not supported`
-      )
   }
+
+  throw new TypeError(
+    `Failed to resolve ${filepath}, the file is not supported`
+  )
 }

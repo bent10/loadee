@@ -1,4 +1,4 @@
 {
-  "root": "src",
-  "output": "dist"
+  root: "src",
+  output: "dist"
 }

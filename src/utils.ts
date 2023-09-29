@@ -1,9 +1,13 @@
+import type { PathLike } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { PathLike } from 'node:fs'
 
 /**
- * Turn a PathLike into a `path` string.
+ * Converts a PathLike object to a resolved file path.
+ *
+ * @param pathlike - The PathLike object to convert.
+ * @param cwd - The current working directory.
+ * @returns The resolved file path as a string.
  */
 export function pathLikeToPath(pathlike: PathLike, cwd: string): string {
   if (Buffer.isBuffer(pathlike)) pathlike = String(pathlike)
@@ -18,14 +22,20 @@ export function pathLikeToPath(pathlike: PathLike, cwd: string): string {
 }
 
 /**
- * Returns true if the given `pathlike` is a file URL like.
+ * Checks if a string is a file or data URL.
+ *
+ * @param pathlike - The string to check.
+ * @returns `true` if the string is a file or data URL, `false` otherwise.
  */
 export function isFileUrlLike(pathlike: string): boolean {
   return pathlike.startsWith('file:') || pathlike.startsWith('data:')
 }
 
 /**
- * Returns `true` if the given `value` is a promise.
+ * Checks if a value is a Promise.
+ *
+ * @param value - The value to check.
+ * @returns `true` if the value is a Promise, `false` otherwise.
  */
 export function isPromise(value: unknown): boolean {
   return (

@@ -6,14 +6,12 @@ import { isPromise, pathLikeToPath } from './utils.js'
 import type { Module, PlainObject } from './types.js'
 
 /**
- * Loads YAML file synchronously and returns the parsed object.
+ * Loads data from a YAML file synchronously.
  *
- * ```js
- * const obj = fromYamlSync('.config.yaml')
- * // => { ... }
- * ```
+ * @param filepath - The path to the YAML file.
+ * @returns The loaded data as a plain object.
  */
-function fromYAMLSync(filepath: string): PlainObject {
+function loadYamlSync(filepath: string): PlainObject {
   try {
     return <PlainObject>load(readFileSync(filepath, 'utf8'))
   } catch (error) {
@@ -22,14 +20,12 @@ function fromYAMLSync(filepath: string): PlainObject {
 }
 
 /**
- * Loads JSON file synchronously and returns the parsed object.
+ * Loads data from a JSON file synchronously.
  *
- * ```js
- * const obj = fromJSONSync('.config.json')
- * // => { ... }
- * ```
+ * @param filepath - The path to the JSON file.
+ * @returns The loaded data as a plain object.
  */
-function fromJSONSync(filepath: string): PlainObject {
+function loadJsonSync(filepath: string): PlainObject {
   try {
     return JSON.parse(readFileSync(filepath, 'utf8'))
   } catch (error) {
@@ -38,14 +34,13 @@ function fromJSONSync(filepath: string): PlainObject {
 }
 
 /**
- * Loads JS file synchronously and returns the `default` exported value.
+ * Loads a CommonJS from a JavaScript file synchronously.
  *
- * ```js
- * const module = fromJSSync('.config.js')
- * // => can be a function, object, string, number, etc.
- * ```
+ * @param filepath - The path to the JavaScript file.
+ * @param ...args - Additional arguments to pass to the module if it's a function.
+ * @returns The loaded module.
  */
-function fromJSSync(filepath: string): Module {
+function loadJsSync(filepath: string): Module {
   try {
     const ext = extname(filepath)
     const require = createRequire(import.meta.url)
@@ -64,24 +59,12 @@ function fromJSSync(filepath: string): Module {
 }
 
 /**
- * Resolves data from `yaml`, `json`, or `js` files synchronously.
+ * Loads data from a file synchronously based on its file extension.
  *
- * The `js` module will be normalize to either a plain object, string, number,
- * boolean, null or undefined.
- *
- * > **NOTE:** This function cannot be used to load ES modules. The `.js`
- * > file will treated as CommonJS.
- *
- * ```js
- * import { loadFileSync } from 'loadee'
- *
- * const fromJsonSync = loadFileSync('data.json')
- * // => { ... }
- * const fromYamlSync = loadFileSync('data.yaml')
- * // => { ... }
- * const fromJsSync = loadFileSync('data.js')
- * // => { ... } or unknown
- * ```
+ * @param pathlike - The path-like value representing the file.
+ * @param cwd - The current working directory.
+ * @param ...args - Additional arguments to pass to the loaded module if it's a function.
+ * @returns The loaded data or module.
  */
 export function loadFileSync(
   pathlike: PathLike,
@@ -93,14 +76,14 @@ export function loadFileSync(
   switch (extname(filepath)) {
     case '.yml':
     case '.yaml':
-      return fromYAMLSync(filepath)
+      return loadYamlSync(filepath)
     case '.json':
     case '':
-      return fromJSONSync(filepath)
+      return loadJsonSync(filepath)
     // treat `.js` file as CommonJS
     case '.js':
     case '.cjs':
-      const { module } = fromJSSync(filepath)
+      const { module } = loadJsSync(filepath)
       // handle promise, if any
       if (isPromise(module)) {
         try {
@@ -111,9 +94,9 @@ export function loadFileSync(
       } else {
         return typeof module === 'function' ? module(...args) : module
       }
+    default:
+      throw new TypeError(
+        `Failed to resolve ${filepath}, the file is not supported`
+      )
   }
-
-  throw new TypeError(
-    `Failed to resolve ${filepath}, the file is not supported`
-  )
 }

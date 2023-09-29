@@ -1,106 +1,128 @@
 # loadee
 
-A utility for loading and parsing YAML, JSON, and JS files.
+A utility to simplify the loading of various types of files, including YAML, JSON, and CommonJS or ES modules. This module provides both synchronous and asynchronous functions for loading data and modules based on file extensions.
 
 ## Install
 
+You can install `loadee` using npm or yarn:
+
 ```bash
 npm i loadee
+# or
+yarn add loadee
 ```
 
 ## Usage
 
-This package is pure ESM, please read the
-[esm-package](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+To use `loadee`, you can import it into your JavaScript or TypeScript project and utilize its various functions for loading files and modules.
 
-```js
-import { loadFile, loadFileSync } from 'loadee'
+### Asynchronous Loading
 
-const fromJSON = await loadFile('.config.json')
-const fromYAML = await loadFile('.config.yaml')
-const fromJS = await loadFile('.config.js')
-const fromCJS = await loadFile('.config.cjs')
+#### `loadFile(pathlike: PathLike, cwd?: string, ...args: unknown[]): Promise<PlainObject | unknown>`
 
-// sync
-const fromJSONSync = loadFileSync('.configrc')
-const fromYAMLSync = loadFileSync('.config.yaml')
-// sync fn does not support ES modules,
-// so the `.js` file will treated as CommonJS
-const fromJSSync = loadFileSync('.config.js')
-```
+Loads data from a file asynchronously based on its file extension.
 
-## Functions
+- `pathlike`: The path-like value representing the file.
+- `cwd` (optional): The current working directory. Defaults to the process's current working directory.
+- `...args` (optional): Additional arguments to pass to the loaded module if it's a function.
 
-### loadFile
-
-▸ **loadFile**(`pathlike`, `cwd?`, ...`args`): `Promise`<`PlainObject` \| `unknown`\>
-
-Resolves data from `yaml`, `json`, or `js` files.
-
-The `js` module will be normalize to either a plain object, string, number,
-boolean, null or undefined.
+To load data from a YAML file asynchronously:
 
 ```js
 import { loadFile } from 'loadee'
 
-const fromJson = await loadFile('data.json')
-// => { ... }
-const fromYaml = await loadFile('data.yaml')
-// => { ... }
-const fromJs = await loadFile('data.js')
-// => { ... } or unknown
-const fromCjs = await loadFile('data.cjs')
-// => { ... } or unknown
+try {
+  const data = await loadFile('data.yaml')
+  console.log('Loaded YAML data:', data)
+} catch (error) {
+  console.error('Error loading YAML data:', error)
+}
 ```
 
-#### Parameters
+To load data from a JSON file asynchronously:
 
-| Name       | Type        |
-| :--------- | :---------- |
-| `pathlike` | `PathLike`  |
-| `cwd`      | `string`    |
-| `...args`  | `unknown`[] |
+```js
+import { loadFile } from 'loadee'
 
-#### Returns
+try {
+  const data = await loadFile('data.json')
+  console.log('Loaded JSON data:', data)
+} catch (error) {
+  console.error('Error loading JSON data:', error)
+}
+```
 
-`Promise`<`PlainObject` \| `unknown`\>
+To load a CommonJS or ES module from a JavaScript file asynchronously:
 
----
+```js
+import { loadFile } from 'loadee'
 
-### loadFileSync
+try {
+  const module = await loadFile('module.js')
+  console.log('Loaded JavaScript module:', module)
+} catch (error) {
+  console.error('Error loading JavaScript module:', error)
+}
+```
 
-▸ **loadFileSync**(`pathlike`, `cwd?`, ...`args`): `PlainObject` \| `unknown`
+### Synchronous Loading
 
-Resolves data from `yaml`, `json`, or `js` files.
+#### `loadFileSync(pathlike: PathLike, cwd?: string, ...args: unknown[]): PlainObject | unknown`
 
-The `js` module will be normalize to either a plain object, string, number,
-boolean, null or undefined.
+Loads data from a file synchronously based on its file extension.
 
-> **NOTE:** This function cannot be used to load ES modules. The `.js`
-> file will treated as CommonJS.
+- `pathlike`: The path-like value representing the file.
+- `cwd` (optional): The current working directory. Defaults to the process's current working directory.
+- `...args` (optional): Additional arguments to pass to the loaded module if it's a function.
+
+To load data from a YAML file synchronously:
 
 ```js
 import { loadFileSync } from 'loadee'
 
-const fromJsonSync = loadFileSync('data.json')
-// => { ... }
-const fromYamlSync = loadFileSync('data.yaml')
-// => { ... }
-const fromJsSync = loadFileSync('data.js')
-// => { ... } or unknown
+try {
+  const data = loadFileSync('data.yaml')
+  console.log('Loaded YAML data:', data)
+} catch (error) {
+  console.error('Error loading YAML data:', error)
+}
 ```
 
-#### Parameters
+To load data from a JSON file synchronously:
 
-| Name       | Type        |
-| :--------- | :---------- |
-| `pathlike` | `PathLike`  |
-| `cwd`      | `string`    |
-| `...args`  | `unknown`[] |
+```js
+import { loadFileSync } from 'loadee'
 
-#### Returns
+try {
+  const data = loadFileSync('data.json')
+  console.log('Loaded JSON data:', data)
+} catch (error) {
+  console.error('Error loading JSON data:', error)
+}
+```
 
-`PlainObject` \| `unknown`
+To load a JavaScript file synchronously:
+
+```js
+import { loadFileSync } from 'loadee'
+
+try {
+  const module = loadFileSync('module.js')
+  console.log('Loaded CommonJS:', module)
+} catch (error) {
+  console.error('Error loading CommonJS:', error)
+}
+```
+
+**NOTE:** The `loadFileSync` function cannot be used to load ES module files. When you attempt to load a `.js` file using this function, it will be treated as a CommonJS module.
+
+## Supported File Types
+
+`loadee` supports loading the following file types:
+
+- `.yaml` and `.yml` files: Loaded asynchronously and synchronously.
+- `.json` files: Loaded asynchronously and synchronously.
+- `.js`, `.mjs`, and `.cjs` files: Loaded asynchronously and synchronously.
 
 ## Contributing
 

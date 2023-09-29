@@ -23,8 +23,22 @@
     "yaml"
   ],
   "type": "module",
-  "exports": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./sync": {
+      "import": "./dist/sync.js",
+      "types": "./dist/sync.d.ts"
+    },
+    "./async": {
+      "import": "./dist/async.js",
+      "types": "./dist/async.d.ts"
+    }
+  },
   "files": [
     "dist",
     "readme.md",
@@ -34,9 +48,9 @@
     "start": "npm run dev",
     "dev": "npm run types && vite build --emptyOutDir=false --watch",
     "build": "vite build && npm run types",
-    "test": "vitest --ui",
+    "test": "vitest",
     "coverage": "vitest run --coverage",
-    "types": "tsc --project tsconfig.prod.json",
+    "types": "tsc -d --emitDeclarationOnly --outDir ./dist",
     "lint": "tsc --noEmit && eslint .",
     "format": "prettier --write ."
   },

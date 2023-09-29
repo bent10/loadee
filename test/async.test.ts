@@ -1,3 +1,5 @@
+/// <reference types="vitest/globals" />
+
 import { pathToFileURL } from 'node:url'
 import { loadFile } from '../src/index.js'
 

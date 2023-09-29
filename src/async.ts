@@ -1,19 +1,17 @@
+import { promises as fsp, type PathLike } from 'node:fs'
 import { extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { promises as fsp, type PathLike } from 'node:fs'
 import { load } from 'js-yaml'
 import { isPromise, pathLikeToPath } from './utils.js'
 import type { Module, PlainObject } from './types.js'
 
 /**
- * Loads YAML file and returns the parsed object.
+ * Loads data from a YAML file asynchronously.
  *
- * ```js
- * const obj = await fromYaml('.config.yaml')
- * // => { ... }
- * ```
+ * @param filepath - The path to the YAML file.
+ * @returns A promise that resolves to the loaded data as a plain object.
  */
-async function fromYAML(filepath: string): Promise<PlainObject> {
+async function loadYAML(filepath: string): Promise<PlainObject> {
   try {
     return <PlainObject>load(await fsp.readFile(filepath, 'utf8'))
   } catch (error) {
@@ -22,14 +20,12 @@ async function fromYAML(filepath: string): Promise<PlainObject> {
 }
 
 /**
- * Loads JSON file and returns the parsed object.
+ * Loads data from a JSON file asynchronously.
  *
- * ```js
- * const obj = await fromJSON('.config.json')
- * // => { ... }
- * ```
+ * @param filepath - The path to the JSON file.
+ * @returns A promise that resolves to the loaded data as a plain object.
  */
-async function fromJSON(filepath: string): Promise<PlainObject> {
+async function loadJson(filepath: string): Promise<PlainObject> {
   try {
     return JSON.parse(await fsp.readFile(filepath, 'utf8'))
   } catch (error) {
@@ -38,14 +34,13 @@ async function fromJSON(filepath: string): Promise<PlainObject> {
 }
 
 /**
- * Loads JS file and returns the `default` exported value.
+ * Loads a CommonJS or ES module from a JavaScript file asynchronously.
  *
- * ```js
- * const module = await fromJS('.config.js')
- * // => can be a function, object, string, number, etc.
- * ```
+ * @param filepath - The path to the JavaScript file.
+ * @param ...args - Additional arguments to pass to the module if it's a function.
+ * @returns A promise that resolves to the loaded module.
  */
-async function fromJS(filepath: string): Promise<Module> {
+async function loadJs(filepath: string): Promise<Module> {
   try {
     const ext = extname(filepath)
     const _module: Module = await import(pathToFileURL(filepath).toString())
@@ -66,23 +61,12 @@ async function fromJS(filepath: string): Promise<Module> {
 }
 
 /**
- * Resolves data from `yaml`, `json`, or `js` files.
+ * Loads data from a file asynchronously based on its file extension.
  *
- * The `js` module will be normalize to either a plain object, string, number,
- * boolean, null or undefined.
- *
- * ```js
- * import { loadFile } from 'loadee'
- *
- * const fromJson = await loadFile('data.json')
- * // => { ... }
- * const fromYaml = await loadFile('data.yaml')
- * // => { ... }
- * const fromJs = await loadFile('data.js')
- * // => { ... } or unknown
- * const fromCjs = await loadFile('data.cjs')
- * // => { ... } or unknown
- * ```
+ * @param pathlike - The path-like value representing the file.
+ * @param cwd - The current working directory.
+ * @param ...args - Additional arguments to pass to the loaded module if it's a function.
+ * @returns A promise that resolves to the loaded data or module.
  */
 export async function loadFile(
   pathlike: PathLike,
@@ -94,13 +78,13 @@ export async function loadFile(
   switch (extname(filepath)) {
     case '.yml':
     case '.yaml':
-      return await fromYAML(filepath)
+      return await loadYAML(filepath)
     case '.json':
     case '':
-      return await fromJSON(filepath)
+      return await loadJson(filepath)
     case '.js':
     case '.mjs':
-      const { default: esModule } = await fromJS(filepath)
+      const { default: esModule } = await loadJs(filepath)
       // handle promise, if any
       if (isPromise(esModule)) {
         try {
@@ -112,7 +96,7 @@ export async function loadFile(
         return typeof esModule === 'function' ? esModule(...args) : esModule
       }
     case '.cjs':
-      const { module } = await fromJS(filepath)
+      const { module } = await loadJs(filepath)
       // handle promise, if any
       if (isPromise(module)) {
         try {
@@ -123,9 +107,9 @@ export async function loadFile(
       } else {
         return typeof module === 'function' ? module(...args) : module
       }
+    default:
+      throw new TypeError(
+        `Failed to resolve ${filepath}, the file is not supported`
+      )
   }
-
-  throw new TypeError(
-    `Failed to resolve ${filepath}, the file is not supported`
-  )
 }

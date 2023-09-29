@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/bent10/loadee/compare/v2.1.6...v2.2.0) (2023-09-29)
+
+
+### Features
+
+* refactoring and some enhancement ([f48bd78](https://github.com/bent10/loadee/commit/f48bd78e96b5a162cf46e57cf79c2f038b2c19ff))
+
 ## [2.1.6](https://github.com/bent10/loadee/compare/v2.1.5...v2.1.6) (2022-08-14)
 
 ### Bug Fixes

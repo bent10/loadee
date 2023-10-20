@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/bent10/loadee/compare/v2.2.0...v2.3.0) (2023-10-20)
+
+
+### Features
+
+* build for `esm` and `cjs` formats ([f68a73c](https://github.com/bent10/loadee/commit/f68a73c3b9bc947c57f948fc2a537e1229095703))
+
 # [2.2.0](https://github.com/bent10/loadee/compare/v2.1.6...v2.2.0) (2023-09-29)
 
 

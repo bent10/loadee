@@ -23,20 +23,14 @@
     "yaml"
   ],
   "type": "module",
-  "module": "./dist/index.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
-    },
-    "./sync": {
-      "import": "./dist/sync.js",
-      "types": "./dist/sync.d.ts"
-    },
-    "./async": {
-      "import": "./dist/async.js",
-      "types": "./dist/async.d.ts"
     }
   },
   "files": [
@@ -46,7 +40,7 @@
   ],
   "scripts": {
     "start": "npm run dev",
-    "dev": "npm run types && vite build --emptyOutDir=false --watch",
+    "dev": "vite build --watch",
     "build": "vite build && npm run types",
     "test": "vitest",
     "coverage": "vitest run --coverage",

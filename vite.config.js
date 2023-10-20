@@ -3,9 +3,13 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   build: {
-    ssr: true,
+    lib: {
+      entry: 'src/index.ts',
+      formats: ['es', 'cjs'],
+      fileName: 'index'
+    },
     rollupOptions: {
-      input: ['src/index.ts', 'src/async.ts', 'src/sync.ts']
+      external: ['js-yaml', /node\:/]
     }
   },
   test: {

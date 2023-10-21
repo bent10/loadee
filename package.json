@@ -52,7 +52,7 @@
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
-    "@types/js-yaml": "4.0.7",
+    "@types/js-yaml": "4.0.8",
     "doogu": "3.2.7"
   },
   "config": {

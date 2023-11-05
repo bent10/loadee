@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/bent10/loadee/compare/v2.3.0...v2.3.1) (2023-11-05)
+
+
+### Bug Fixes
+
+* ignores cache for js files ([9fa54a6](https://github.com/bent10/loadee/commit/9fa54a66acaa3ade637191a614b3bf151156fc25))
+
 # [2.3.0](https://github.com/bent10/loadee/compare/v2.2.0...v2.3.0) (2023-10-20)
 
 

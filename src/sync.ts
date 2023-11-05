@@ -44,6 +44,10 @@ function loadJsSync(filepath: string): Module {
   try {
     const ext = extname(filepath)
     const require = createRequire(import.meta.url)
+
+    // delete cache
+    delete require.cache[require.resolve(filepath)]
+
     const _module: Module = require(filepath)
 
     if (/^\.(c?js)$/.test(ext) && !('module' in _module)) {

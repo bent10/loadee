@@ -2,7 +2,7 @@ import { promises as fsp, type PathLike } from 'node:fs'
 import { extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { load } from 'js-yaml'
-import { isPromise, pathLikeToPath } from './utils.js'
+import { isPromise, pathLikeToPath, randomId } from './utils.js'
 import type { Module, PlainObject } from './types.js'
 
 /**
@@ -43,7 +43,10 @@ async function loadJson(filepath: string): Promise<PlainObject> {
 async function loadJs(filepath: string): Promise<Module> {
   try {
     const ext = extname(filepath)
-    const _module: Module = await import(pathToFileURL(filepath).toString())
+    const ver = randomId()
+    const _module: Module = await import(
+      pathToFileURL(filepath).toString() + `?v=${ver}`
+    )
 
     if (
       (/^\.(m?js)$/.test(ext) && !('default' in _module)) ||

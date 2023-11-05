@@ -45,3 +45,10 @@ export function isPromise(value: unknown): boolean {
     typeof (value as any).then === 'function'
   )
 }
+
+/**
+ * Returns random string.
+ */
+export function randomId() {
+  return (Math.random() + 1).toString(36).substring(7)
+}

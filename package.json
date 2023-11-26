@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
-    "doogu": "3.2.7"
+    "doogu": "3.2.8"
   },
   "config": {
     "commitizen": {

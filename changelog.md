@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/bent10/loadee/compare/v2.3.1...v3.0.0) (2024-02-02)
+
+
+### Features
+
+* use export default for javascript loader ([5201474](https://github.com/bent10/loadee/commit/520147459e52f854144f8e0a7ac4c4208688c3c3))
+
+
+### BREAKING CHANGES
+
+* you must rename all `exports.module` to `exports.default` or `module.exports`
+
 ## [2.3.1](https://github.com/bent10/loadee/compare/v2.3.0...v2.3.1) (2023-11-05)
 
 

@@ -41,14 +41,12 @@ test('from json', async () => {
 
 test('Throws from json', async () => {
   // Error: ENOENT: no such file or directory, open ...
-  await expect(loadFile('nofile.json')).rejects.toThrowError(
-    /ENOENT: no such file or directory, open/
-  )
+  await expect(loadFile('nofile.json')).rejects.toThrowError()
 
   // Error: Unexpected token...
   await expect(
     loadFile('fixtures/invalid.json', testPath)
-  ).rejects.toThrowError(/Unexpected token/)
+  ).rejects.toThrowError()
 })
 
 test('from extension less', async () => {

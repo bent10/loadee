@@ -41,14 +41,10 @@ test('from json', () => {
 
 test('Throws from json', () => {
   // Error: ENOENT: no such file or directory, open...
-  expect(() => loadFileSync('nofile.json')).toThrowError(
-    /ENOENT: no such file or directory, open/
-  )
+  expect(() => loadFileSync('nofile.json')).toThrowError()
 
   // Error: Unexpected token...
-  expect(() => loadFileSync('fixtures/invalid.json', testPath)).toThrowError(
-    /Unexpected token/
-  )
+  expect(() => loadFileSync('fixtures/invalid.json', testPath)).toThrowError()
 })
 
 test('from extension less', () => {

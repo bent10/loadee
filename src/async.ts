@@ -3,7 +3,7 @@ import { extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { load } from 'js-yaml'
 import { isPromise, pathLikeToPath, randomId } from './utils.js'
-import type { Module, PlainObject } from './types.js'
+import type { Fn, PlainObject } from './types.js'
 
 /**
  * Loads data from a YAML file asynchronously.
@@ -40,24 +40,44 @@ async function loadJson(filepath: string): Promise<PlainObject> {
  * @param ...args - Additional arguments to pass to the module if it's a function.
  * @returns A promise that resolves to the loaded module.
  */
-async function loadJs(filepath: string): Promise<Module> {
+async function loadJs(filepath: string, ...args: unknown[]) {
   try {
-    const ext = extname(filepath)
     const ver = randomId()
-    const _module: Module = await import(
+    let { default: mod } = await import(
       pathToFileURL(filepath).toString() + `?v=${ver}`
     )
 
-    if (
-      (/^\.(m?js)$/.test(ext) && !('default' in _module)) ||
-      (/^\.(cjs)$/.test(ext) && !('module' in _module))
-    ) {
+    if (filepath.endsWith('.cjs') && typeof mod === 'object') {
+      const isArray = Array.isArray(mod)
+
+      if (!isPromise(mod) && !isArray && !('default' in mod))
+        throw new SyntaxError(
+          'Expected module file to be exported as default export'
+        )
+
+      mod = isArray || isPromise(mod) ? mod : mod.default
+    }
+
+    // if (filepath.endsWith('.js') || filepath.endsWith('.mjs')) {
+    //   mod = mod.default
+    // }
+
+    if (typeof mod === 'undefined') {
       throw new SyntaxError(
         'Expected module file to be exported as default export'
       )
     }
 
-    return _module
+    // handle promise, if any
+    if (isPromise(mod)) {
+      try {
+        return Promise.resolve((mod as Fn)(...args))
+      } catch {
+        return Promise.resolve(mod)
+      }
+    } else {
+      return typeof mod === 'function' ? mod(...args) : mod
+    }
   } catch (error) {
     throw error
   }
@@ -87,32 +107,9 @@ export async function loadFile(
       return await loadJson(filepath)
     case '.js':
     case '.mjs':
-      const { default: esModule } = await loadJs(filepath)
-      // handle promise, if any
-      if (isPromise(esModule)) {
-        try {
-          return await esModule(...args)
-        } catch {
-          return await esModule
-        }
-      } else {
-        return typeof esModule === 'function' ? esModule(...args) : esModule
-      }
     case '.cjs':
-      const { module } = await loadJs(filepath)
-      // handle promise, if any
-      if (isPromise(module)) {
-        try {
-          return await module(...args)
-        } catch {
-          return await module
-        }
-      } else {
-        return typeof module === 'function' ? module(...args) : module
-      }
+      return await loadJs(filepath, args)
     default:
-      throw new TypeError(
-        `Failed to resolve ${filepath}, the file is not supported`
-      )
+      throw new TypeError(`Unsupported file format: ${filepath}`)
   }
 }

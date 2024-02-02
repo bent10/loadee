@@ -1,25 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * Represents a plain JavaScript object with string keys and values of any type.
+ * Represents a plain JavaScript object with string keys and values that can be
+ * primitive, another plain object, or an array of plain object values.
  */
-export interface PlainObject {
-  [key: string]: any
+export type PlainObject = { [Key in string]: PlainObjectValue } & {
+  [Key in string]?: PlainObjectValue | undefined
 }
 
 /**
- * A function that takes any number of arguments and returns a value of any type.
+ * Represents an array of plain object values or readonly plain object values.
  */
-export type fnLike = (...args: any[]) => any
+export type ArrayObject = PlainObjectValue[] | readonly PlainObjectValue[]
 
 /**
- * A type representing a module, which can have a default export or a named "module" export.
+ * Represents a value that can be primitive, a plain object, or an array of plain
+ * object values.
  */
-export type Module = {
-  default?: DefaultModule
-  module?: DefaultModule
-}
+export type PlainObjectValue = PrimitiveValue | PlainObject | ArrayObject
 
 /**
- * A type representing a module's default export.
+ * Represents a primitive JavaScript value.
  */
-export type DefaultModule = any | fnLike
+export type PrimitiveValue = string | number | boolean | null
+
+/**
+ * Represents a function that can accept any number of arguments and return
+ * a value synchronously or asynchronously.
+ */
+export type Fn = (...args: unknown[]) => unknown | Promise<unknown>

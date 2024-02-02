@@ -1,1 +1,1 @@
-exports.module = 42
+exports.default = 42

@@ -3,7 +3,7 @@ import { extname } from 'node:path'
 import { readFileSync, type PathLike } from 'node:fs'
 import { load } from 'js-yaml'
 import { isPromise, pathLikeToPath } from './utils.js'
-import type { Module, PlainObject } from './types.js'
+import type { PlainObject, Fn } from './types.js'
 
 /**
  * Loads data from a YAML file synchronously.
@@ -40,23 +40,42 @@ function loadJsonSync(filepath: string): PlainObject {
  * @param ...args - Additional arguments to pass to the module if it's a function.
  * @returns The loaded module.
  */
-function loadJsSync(filepath: string): Module {
+function loadJsSync(filepath: string, ...args: unknown[]) {
   try {
-    const ext = extname(filepath)
     const require = createRequire(import.meta.url)
 
     // delete cache
     delete require.cache[require.resolve(filepath)]
 
-    const _module: Module = require(filepath)
+    let mod = require(filepath)
 
-    if (/^\.(c?js)$/.test(ext) && !('module' in _module)) {
+    if (typeof mod === 'object') {
+      const isArray = Array.isArray(mod)
+
+      if (!isPromise(mod) && !isArray && !('default' in mod))
+        throw new SyntaxError(
+          'Expected module file to be exported as default export'
+        )
+
+      mod = isArray || isPromise(mod) ? mod : mod.default
+    }
+
+    if (typeof mod === 'undefined') {
       throw new SyntaxError(
         'Expected module file to be exported as default export'
       )
     }
 
-    return _module
+    // handle promise, if any
+    if (isPromise(mod)) {
+      try {
+        return Promise.resolve((mod as Fn)(...args))
+      } catch {
+        return Promise.resolve(mod)
+      }
+    } else {
+      return typeof mod === 'function' ? mod(...args) : mod
+    }
   } catch (error) {
     throw error
   }
@@ -87,20 +106,9 @@ export function loadFileSync(
     // treat `.js` file as CommonJS
     case '.js':
     case '.cjs':
-      const { module } = loadJsSync(filepath)
-      // handle promise, if any
-      if (isPromise(module)) {
-        try {
-          return Promise.resolve(module(...args))
-        } catch {
-          return Promise.resolve(module)
-        }
-      } else {
-        return typeof module === 'function' ? module(...args) : module
-      }
+      return loadJsSync(filepath, args)
+
     default:
-      throw new TypeError(
-        `Failed to resolve ${filepath}, the file is not supported`
-      )
+      throw new TypeError(`Unsupported file format: ${filepath}`)
   }
 }

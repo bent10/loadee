@@ -1,5 +1,5 @@
 // support for commonjs!
-exports.module = () => {
+exports.default = () => {
   return [
     { name: 'John Doe', subscription: 'Standard' },
     { name: 'Jane Smith', subscription: 'Free' }

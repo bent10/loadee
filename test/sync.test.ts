@@ -85,9 +85,8 @@ test('failed from mjs', () => {
 })
 
 test('from cjs', async () => {
-  const fromCjs = loadFileSync(pathToFileURL('test/fixtures/cjs/data.cjs').href)
+  const fromCjs = loadFileSync('fixtures/cjs/data.cjs', testPath)
   const fromCjsAsync = loadFileSync('fixtures/cjs/data.async.cjs', testPath)
-
   const fromCjsVar = loadFileSync('fixtures/cjs/data.var.cjs', testPath)
   const fromCjsVarAsync = loadFileSync(
     'fixtures/cjs/data.asyncvar.cjs',
@@ -130,8 +129,8 @@ test('Throws from mjs & cjs no default export', () => {
 })
 
 test('throws unknown file type', () => {
-  // TypeError: Failed to resolve...
+  // TypeError: Unsupported file format: ...
   expect(() => loadFileSync('fixtures/data.toml', testPath)).toThrowError(
-    /Failed to resolve/
+    /Unsupported file format: /
   )
 })

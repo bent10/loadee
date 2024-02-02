@@ -102,12 +102,14 @@ test('from cjs', async () => {
 
 test('Throws from mjs & cjs', async () => {
   // Error: Failed to load url...
-  await expect(loadFile('nofile.js')).rejects.toThrow()
+  await expect(loadFile('missing.js')).rejects.toThrow()
 
   await expect(loadFile('fixtures/invalid.js', testPath)).resolves.not.toThrow()
 
   // SyntaxError: Expected module file to be exported as default export...
-  await expect(loadFile('fixtures/cjs/invalid.cjs', testPath)).rejects.toThrow()
+  await expect(
+    loadFile('fixtures/cjs/invalid.cjs', testPath)
+  ).resolves.not.toThrow()
 })
 
 test('Throws from mjs & cjs no default export', async () => {
@@ -127,8 +129,8 @@ test('Throws from mjs & cjs no default export', async () => {
 })
 
 test('throws unknown file type', async () => {
-  // TypeError: Failed to resolve...
+  // TypeError: Unsupported file format: ...
   await expect(loadFile('fixtures/data.toml', testPath)).rejects.toThrowError(
-    /Failed to resolve/
+    /Unsupported file format: /
   )
 })

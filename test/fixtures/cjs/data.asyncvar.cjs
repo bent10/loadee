@@ -1,1 +1,1 @@
-exports.module = Promise.resolve(42)
+exports.default = Promise.resolve(42)

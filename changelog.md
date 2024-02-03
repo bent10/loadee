@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/bent10/loadee/compare/v3.0.0...v3.0.1) (2024-02-03)
+
+
+### Bug Fixes
+
+* resolve additional args for loaded js ([87c686f](https://github.com/bent10/loadee/commit/87c686f65babc530ceae6545d50144b39a2f6715))
+
 # [3.0.0](https://github.com/bent10/loadee/compare/v2.3.1...v3.0.0) (2024-02-02)
 
 

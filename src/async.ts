@@ -108,7 +108,7 @@ export async function loadFile(
     case '.js':
     case '.mjs':
     case '.cjs':
-      return await loadJs(filepath, args)
+      return await loadJs(filepath, ...args)
     default:
       throw new TypeError(`Unsupported file format: ${filepath}`)
   }

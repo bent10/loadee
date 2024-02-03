@@ -106,7 +106,7 @@ export function loadFileSync(
     // treat `.js` file as CommonJS
     case '.js':
     case '.cjs':
-      return loadJsSync(filepath, args)
+      return loadJsSync(filepath, ...args)
 
     default:
       throw new TypeError(`Unsupported file format: ${filepath}`)

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { promises as fsp, type PathLike } from 'node:fs'
 import { extname } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { load } from 'js-yaml'
 import { isPromise, pathLikeToPath, randomId } from './utils.js'
-import type { Fn, PlainObject } from './types.js'
+import type { Fn } from './types.js'
 
 /**
  * Loads data from a YAML file asynchronously.
@@ -11,9 +12,9 @@ import type { Fn, PlainObject } from './types.js'
  * @param filepath - The path to the YAML file.
  * @returns A promise that resolves to the loaded data as a plain object.
  */
-async function loadYAML(filepath: string): Promise<PlainObject> {
+async function loadYAML<T = any>(filepath: string): Promise<T> {
   try {
-    return <PlainObject>load(await fsp.readFile(filepath, 'utf8'))
+    return <T>load(await fsp.readFile(filepath, 'utf8'))
   } catch (error) {
     throw error
   }
@@ -25,7 +26,7 @@ async function loadYAML(filepath: string): Promise<PlainObject> {
  * @param filepath - The path to the JSON file.
  * @returns A promise that resolves to the loaded data as a plain object.
  */
-async function loadJson(filepath: string): Promise<PlainObject> {
+async function loadJson<T = any>(filepath: string): Promise<T> {
   try {
     return JSON.parse(await fsp.readFile(filepath, 'utf8'))
   } catch (error) {
@@ -40,7 +41,10 @@ async function loadJson(filepath: string): Promise<PlainObject> {
  * @param ...args - Additional arguments to pass to the module if it's a function.
  * @returns A promise that resolves to the loaded module.
  */
-async function loadJs(filepath: string, ...args: unknown[]) {
+async function loadJs<T = any>(
+  filepath: string,
+  ...args: unknown[]
+): Promise<T> {
   try {
     const ver = randomId()
     let { default: mod } = await import(
@@ -71,7 +75,7 @@ async function loadJs(filepath: string, ...args: unknown[]) {
     // handle promise, if any
     if (isPromise(mod)) {
       try {
-        return Promise.resolve((mod as Fn)(...args))
+        return <Promise<T>>Promise.resolve((mod as Fn)(...args))
       } catch {
         return Promise.resolve(mod)
       }
@@ -91,24 +95,24 @@ async function loadJs(filepath: string, ...args: unknown[]) {
  * @param ...args - Additional arguments to pass to the loaded module if it's a function.
  * @returns A promise that resolves to the loaded data or module.
  */
-export async function loadFile(
+export async function loadFile<T = any>(
   pathlike: PathLike,
   cwd: string = process.cwd(),
   ...args: unknown[]
-): Promise<PlainObject | unknown> {
+): Promise<T> {
   const filepath = pathLikeToPath(pathlike, cwd)
 
   switch (extname(filepath)) {
     case '.yml':
     case '.yaml':
-      return await loadYAML(filepath)
+      return await loadYAML<T>(filepath)
     case '.json':
     case '':
-      return await loadJson(filepath)
+      return await loadJson<T>(filepath)
     case '.js':
     case '.mjs':
     case '.cjs':
-      return await loadJs(filepath, ...args)
+      return await loadJs<T>(filepath, ...args)
     default:
       throw new TypeError(`Unsupported file format: ${filepath}`)
   }

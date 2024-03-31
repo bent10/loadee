@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createRequire } from 'node:module'
 import { extname } from 'node:path'
 import { readFileSync, type PathLike } from 'node:fs'
 import { load } from 'js-yaml'
 import { isPromise, pathLikeToPath } from './utils.js'
-import type { PlainObject, Fn } from './types.js'
+import type { Fn } from './types.js'
 
 /**
  * Loads data from a YAML file synchronously.
@@ -11,9 +12,9 @@ import type { PlainObject, Fn } from './types.js'
  * @param filepath - The path to the YAML file.
  * @returns The loaded data as a plain object.
  */
-function loadYamlSync(filepath: string): PlainObject {
+function loadYamlSync<T = any>(filepath: string): T {
   try {
-    return <PlainObject>load(readFileSync(filepath, 'utf8'))
+    return <T>load(readFileSync(filepath, 'utf8'))
   } catch (error) {
     throw error
   }
@@ -25,7 +26,7 @@ function loadYamlSync(filepath: string): PlainObject {
  * @param filepath - The path to the JSON file.
  * @returns The loaded data as a plain object.
  */
-function loadJsonSync(filepath: string): PlainObject {
+function loadJsonSync<T = any>(filepath: string): T {
   try {
     return JSON.parse(readFileSync(filepath, 'utf8'))
   } catch (error) {
@@ -40,7 +41,10 @@ function loadJsonSync(filepath: string): PlainObject {
  * @param ...args - Additional arguments to pass to the module if it's a function.
  * @returns The loaded module.
  */
-function loadJsSync(filepath: string, ...args: unknown[]) {
+function loadJsSync<T = any>(
+  filepath: string,
+  ...args: unknown[]
+): T | Promise<T> {
   try {
     const require = createRequire(import.meta.url)
 
@@ -69,9 +73,9 @@ function loadJsSync(filepath: string, ...args: unknown[]) {
     // handle promise, if any
     if (isPromise(mod)) {
       try {
-        return Promise.resolve((mod as Fn)(...args))
+        return Promise.resolve((mod as Fn)(...args)) as Promise<T>
       } catch {
-        return Promise.resolve(mod)
+        return Promise.resolve(mod) as Promise<T>
       }
     } else {
       return typeof mod === 'function' ? mod(...args) : mod
@@ -89,24 +93,24 @@ function loadJsSync(filepath: string, ...args: unknown[]) {
  * @param ...args - Additional arguments to pass to the loaded module if it's a function.
  * @returns The loaded data or module.
  */
-export function loadFileSync(
+export function loadFileSync<T = any>(
   pathlike: PathLike,
   cwd: string = process.cwd(),
   ...args: unknown[]
-): PlainObject | unknown {
+): T {
   const filepath = pathLikeToPath(pathlike, cwd)
 
   switch (extname(filepath)) {
     case '.yml':
     case '.yaml':
-      return loadYamlSync(filepath)
+      return loadYamlSync<T>(filepath)
     case '.json':
     case '':
-      return loadJsonSync(filepath)
+      return loadJsonSync<T>(filepath)
     // treat `.js` file as CommonJS
     case '.js':
     case '.cjs':
-      return loadJsSync(filepath, ...args)
+      return loadJsSync<T>(filepath, ...args) as T
 
     default:
       throw new TypeError(`Unsupported file format: ${filepath}`)

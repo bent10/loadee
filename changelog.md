@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/bent10/loadee/compare/v3.0.1...v3.1.0) (2024-03-31)
+
+
+### Features
+
+* add support for generic types ([45cdcfe](https://github.com/bent10/loadee/commit/45cdcfe20d6a89a3fdbee3d56ed429c1b7c616c7))
+
 ## [3.0.1](https://github.com/bent10/loadee/compare/v3.0.0...v3.0.1) (2024-02-03)
 
 

@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/bent10/loadee/compare/v3.1.0...v3.1.1) (2024-03-31)
+
+
+### Bug Fixes
+
+* tweaks doc ([9231a3e](https://github.com/bent10/loadee/commit/9231a3e91757dd72ed3d241796b9ec94ca6883bb))
+
 # [3.1.0](https://github.com/bent10/loadee/compare/v3.0.1...v3.1.0) (2024-03-31)
 
 

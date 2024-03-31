@@ -18,7 +18,7 @@ To use `loadee`, you can import it into your JavaScript or TypeScript project an
 
 ### Asynchronous Loading
 
-#### `loadFile(pathlike: PathLike, cwd?: string, ...args: unknown[]): Promise<PlainObject | unknown>`
+#### `loadFile<T = any>(pathlike: PathLike, cwd?: string, ...args: unknown[]): Promise<T>`
 
 Loads data from a file asynchronously based on its file extension.
 
@@ -67,7 +67,7 @@ try {
 
 ### Synchronous Loading
 
-#### `loadFileSync(pathlike: PathLike, cwd?: string, ...args: unknown[]): PlainObject | unknown`
+#### `loadFileSync<T = any>(pathlike: PathLike, cwd?: string, ...args: unknown[]): T`
 
 Loads data from a file synchronously based on its file extension.
 
@@ -124,6 +124,10 @@ try {
 - `.json` files: Loaded asynchronously and synchronously.
 - `.js`, `.mjs`, and `.cjs` files: Loaded asynchronously and synchronously.
 
+## Related
+
+- [`rcfy`](https://github.com/bent10/rcfy) – Finds and loads runtime-configuration file for the current project with precedence.
+
 ## Contributing
 
 We 💛&nbsp; issues.
@@ -144,4 +148,4 @@ git add . && git cz
 
 ![GitHub](https://img.shields.io/github/license/bent10/loadee)
 
-A project by [Stilearning](https://stilearning.com) &copy; 2021-2023.
+A project by [Stilearning](https://stilearning.com) &copy; 2021-2024.

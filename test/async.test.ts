@@ -25,7 +25,7 @@ test('Throws from yml/yaml', async () => {
 
   // YAMLException: duplicated mapping key (2:1) ...
   await expect(loadFile('fixtures/invalid.yml', testPath)).rejects.toThrowError(
-    /duplicated mapping key \(2\:1\)/
+    /duplicated mapping key \(2:1\)/
   )
 })
 

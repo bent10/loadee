@@ -9,7 +9,7 @@ export default defineConfig({
       fileName: 'index'
     },
     rollupOptions: {
-      external: ['js-yaml', /node\:/]
+      external: ['js-yaml', /node:/]
     }
   },
   test: {

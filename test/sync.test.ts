@@ -25,7 +25,7 @@ test('Throws from yml/yaml', () => {
 
   // YAMLException: duplicated mapping key (2:1)...
   expect(() => loadFileSync('fixtures/invalid.yml', testPath)).toThrowError(
-    /duplicated mapping key \(2\:1\)/
+    /duplicated mapping key \(2:1\)/
   )
 })
 
@@ -113,7 +113,7 @@ test('Throws from cjs', () => {
 
   // SyntaxError: Unexpected token 'export'...
   expect(() => loadFileSync('fixtures/cjs/invalid.cjs', testPath)).toThrowError(
-    /Unexpected token \'export\'/
+    /Unexpected token 'export'/
   )
 })
 

@@ -53,17 +53,14 @@
   },
   "devDependencies": {
     "@types/js-yaml": "4.0.9",
-    "doogu": "3.2.13"
+    "doogu": "4.0.4"
   },
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
   },
-  "eslintConfig": {
-    "extends": "./node_modules/doogu/eslint"
-  },
-  "prettier": "doogu/prettier.json",
+  "prettier": "doogu/prettier.config.js",
   "release": {
     "extends": "doogu/release.config.js"
   }

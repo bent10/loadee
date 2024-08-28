@@ -13,11 +13,7 @@ import type { Fn } from './types.js'
  * @returns A promise that resolves to the loaded data as a plain object.
  */
 async function loadYAML<T = any>(filepath: string): Promise<T> {
-  try {
-    return <T>load(await fsp.readFile(filepath, 'utf8'))
-  } catch (error) {
-    throw error
-  }
+  return <T>load(await fsp.readFile(filepath, 'utf8'))
 }
 
 /**
@@ -27,11 +23,7 @@ async function loadYAML<T = any>(filepath: string): Promise<T> {
  * @returns A promise that resolves to the loaded data as a plain object.
  */
 async function loadJson<T = any>(filepath: string): Promise<T> {
-  try {
-    return JSON.parse(await fsp.readFile(filepath, 'utf8'))
-  } catch (error) {
-    throw error
-  }
+  return JSON.parse(await fsp.readFile(filepath, 'utf8'))
 }
 
 /**
@@ -45,45 +37,41 @@ async function loadJs<T = any>(
   filepath: string,
   ...args: unknown[]
 ): Promise<T> {
-  try {
-    const ver = randomId()
-    let { default: mod } = await import(
-      pathToFileURL(filepath).toString() + `?v=${ver}`
-    )
+  const ver = randomId()
+  let { default: mod } = await import(
+    pathToFileURL(filepath).toString() + `?v=${ver}`
+  )
 
-    if (filepath.endsWith('.cjs') && typeof mod === 'object') {
-      const isArray = Array.isArray(mod)
+  if (filepath.endsWith('.cjs') && typeof mod === 'object') {
+    const isArray = Array.isArray(mod)
 
-      if (!isPromise(mod) && !isArray && !('default' in mod))
-        throw new SyntaxError(
-          'Expected module file to be exported as default export'
-        )
-
-      mod = isArray || isPromise(mod) ? mod : mod.default
-    }
-
-    // if (filepath.endsWith('.js') || filepath.endsWith('.mjs')) {
-    //   mod = mod.default
-    // }
-
-    if (typeof mod === 'undefined') {
+    if (!isPromise(mod) && !isArray && !('default' in mod))
       throw new SyntaxError(
         'Expected module file to be exported as default export'
       )
-    }
 
-    // handle promise, if any
-    if (isPromise(mod)) {
-      try {
-        return <Promise<T>>Promise.resolve((mod as Fn)(...args))
-      } catch {
-        return Promise.resolve(mod)
-      }
-    } else {
-      return typeof mod === 'function' ? mod(...args) : mod
+    mod = isArray || isPromise(mod) ? mod : mod.default
+  }
+
+  // if (filepath.endsWith('.js') || filepath.endsWith('.mjs')) {
+  //   mod = mod.default
+  // }
+
+  if (typeof mod === 'undefined') {
+    throw new SyntaxError(
+      'Expected module file to be exported as default export'
+    )
+  }
+
+  // handle promise, if any
+  if (isPromise(mod)) {
+    try {
+      return <Promise<T>>Promise.resolve((mod as Fn)(...args))
+    } catch {
+      return Promise.resolve(mod)
     }
-  } catch (error) {
-    throw error
+  } else {
+    return typeof mod === 'function' ? mod(...args) : mod
   }
 }
 

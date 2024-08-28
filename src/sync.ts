@@ -13,11 +13,7 @@ import type { Fn } from './types.js'
  * @returns The loaded data as a plain object.
  */
 function loadYamlSync<T = any>(filepath: string): T {
-  try {
-    return <T>load(readFileSync(filepath, 'utf8'))
-  } catch (error) {
-    throw error
-  }
+  return <T>load(readFileSync(filepath, 'utf8'))
 }
 
 /**
@@ -27,11 +23,7 @@ function loadYamlSync<T = any>(filepath: string): T {
  * @returns The loaded data as a plain object.
  */
 function loadJsonSync<T = any>(filepath: string): T {
-  try {
-    return JSON.parse(readFileSync(filepath, 'utf8'))
-  } catch (error) {
-    throw error
-  }
+  return JSON.parse(readFileSync(filepath, 'utf8'))
 }
 
 /**
@@ -45,43 +37,39 @@ function loadJsSync<T = any>(
   filepath: string,
   ...args: unknown[]
 ): T | Promise<T> {
-  try {
-    const require = createRequire(import.meta.url)
+  const require = createRequire(import.meta.url)
 
-    // delete cache
-    delete require.cache[require.resolve(filepath)]
+  // delete cache
+  delete require.cache[require.resolve(filepath)]
 
-    let mod = require(filepath)
+  let mod = require(filepath)
 
-    if (typeof mod === 'object') {
-      const isArray = Array.isArray(mod)
+  if (typeof mod === 'object') {
+    const isArray = Array.isArray(mod)
 
-      if (!isPromise(mod) && !isArray && !('default' in mod))
-        throw new SyntaxError(
-          'Expected module file to be exported as default export'
-        )
-
-      mod = isArray || isPromise(mod) ? mod : mod.default
-    }
-
-    if (typeof mod === 'undefined') {
+    if (!isPromise(mod) && !isArray && !('default' in mod))
       throw new SyntaxError(
         'Expected module file to be exported as default export'
       )
-    }
 
-    // handle promise, if any
-    if (isPromise(mod)) {
-      try {
-        return Promise.resolve((mod as Fn)(...args)) as Promise<T>
-      } catch {
-        return Promise.resolve(mod) as Promise<T>
-      }
-    } else {
-      return typeof mod === 'function' ? mod(...args) : mod
+    mod = isArray || isPromise(mod) ? mod : mod.default
+  }
+
+  if (typeof mod === 'undefined') {
+    throw new SyntaxError(
+      'Expected module file to be exported as default export'
+    )
+  }
+
+  // handle promise, if any
+  if (isPromise(mod)) {
+    try {
+      return Promise.resolve((mod as Fn)(...args)) as Promise<T>
+    } catch {
+      return Promise.resolve(mod) as Promise<T>
     }
-  } catch (error) {
-    throw error
+  } else {
+    return typeof mod === 'function' ? mod(...args) : mod
   }
 }
 

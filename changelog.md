@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/bent10/loadee/compare/v3.1.1...v3.1.2) (2024-08-28)
+
+
+### Bug Fixes
+
+* **deps:** update `doogu` to `v4.0.4` ([ec64130](https://github.com/bent10/loadee/commit/ec641309abab354e6ffb4ac0d2405450780916a0))
+
 ## [3.1.1](https://github.com/bent10/loadee/compare/v3.1.0...v3.1.1) (2024-03-31)
 
 
